@@ -100,6 +100,5 @@ ax0up.tick_params(axis='x',which='minor',direction='in',bottom=False,top=True,le
 
 plt.tight_layout()
 plt.subplots_adjust(hspace=.0)
-plt.show()
 plt.savefig('plots/noisy_spectrum_200Mpc_z%.1f_fX%.2f_xHI%.2f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_%dLOS.png' % (z,fX_name,xHI_mean,telescope,spec_res,S_min_QSO,alpha_R,t_int,LOS))
 plt.show()
