@@ -1,4 +1,5 @@
-'''Functions to incorporate instrumental features
+'''
+Functions to incorporate instrumental features
 
 Version 18.10.2023
 
