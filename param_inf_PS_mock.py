@@ -82,14 +82,10 @@ LOS = random.randint(0,Nlos-1,size=Nobs)
 signal_multiobs = PS_nsv_bin[LOS][:]
 PS_signal_mock = np.mean(signal_multiobs,axis=0)
 
-print(PS_signal_mock+PS_signal_mock_std)
-print(PS_signal_mock)
-print(PS_signal_mock-PS_signal_mock_std)
-
 print('Mock data prepared')
 
 
-
+print('Prepare interpolator')
 #Find all of the datasets for the interpolation
 files = glob.glob(path_LOS+'*.dat')
 
@@ -149,12 +145,14 @@ print('Interpolator prepared')
 data = np.load('%s/flatsamp_200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps.npy' % (path,xHI_mean_mock,logfX_mock,telescope,spec_res,S147,alphaR,tint,d_log_k_bins,Nkbins,Nsteps))
 xHI_inf = data[0,0]
 logfX_inf = data[0,1]
+print('Inferred parameters:')
 print(xHI_inf,logfX_inf)
 
 ind_draws = np.random.randint(1,data.shape[0],Ndraws)
 data = data[ind_draws][:]
 xHI_draws = data[:,0]
 logfX_draws = data[:,1]
+print('Posterior draws:')
 print(xHI_draws)
 print(logfX_draws)
 
