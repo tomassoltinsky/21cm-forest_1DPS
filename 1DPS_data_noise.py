@@ -17,12 +17,12 @@ start_clock = time.perf_counter()
 #Input parameters
 path = 'datasets/21cmFAST_los/'
 
-z_name = float(sys.argv[1])		#redshift
-dvH = float(sys.argv[2])		  #rebinning width in km/s
-spec_res = float(sys.argv[3])	#spectral resolution of telescope (i.e. frequency channel width) in kHz
-telescope = str(sys.argv[4])	#telescope
-N_d = int(sys.argv[5])			  #number dishes used by telescope
-S_min_QSO = float(sys.argv[6])	    #intrinsic flux of QSO at 147Hz in mJy
+z_name = float(sys.argv[1])		  #redshift
+dvH = float(sys.argv[2])		    #rebinning width in km/s
+spec_res = float(sys.argv[3])	  #spectral resolution of telescope (i.e. frequency channel width) in kHz
+telescope = str(sys.argv[4])	  #telescope
+N_d = int(sys.argv[5])			    #number dishes used by telescope
+S_min_QSO = float(sys.argv[6])	#intrinsic flux of QSO at 147Hz in mJy
 alpha_R = float(sys.argv[7])	  #radio spectral index of QSO
 t_int = float(sys.argv[8])		  #integration time of observation in hours
 
