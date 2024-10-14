@@ -13,8 +13,6 @@ import scipy.signal as scisi
 from astropy.convolution import convolve, Box1DKernel
 from matplotlib.ticker import AutoMinorLocator
 from matplotlib import gridspec
-import openpyxl
-import time
 from scipy import interpolate
 from scipy.optimize import minimize
 import emcee
@@ -30,12 +28,12 @@ spec_res = float(sys.argv[3])       #spectral resolution of the telescope in kHz
 xHI_mean_mock = float(sys.argv[4])  #mock HI fraction
 logfX_mock = float(sys.argv[5])     #mock logfX
 path_LOS = '../../datasets/21cmFAST_los/los/'
-telescope = str(sys.argv[6])
+telescope = str(sys.argv[6])        #telescope
 S147 = float(sys.argv[7])           #intrinsic flux density of background source at 147MHz in mJy
 alphaR = float(sys.argv[8])         #radio spectrum power-law index of background source
 tint = float(sys.argv[9])           #intergration time for the observation in h
-Nobs = int(sys.argv[10])
-Nkbins = int(sys.argv[11])
+Nobs = int(sys.argv[10])            #number of LOS to be observed
+Nkbins = int(sys.argv[11])          #number of k bins
 
 path = 'MCMC_samples'
 Nsteps = 100000
@@ -76,7 +74,6 @@ for i in range(n_los):
 
 #Get mean for each k bin assuming observation of multiple LOS
 PS_nsv_ens = instrumental_features.multi_obs(PS_nsv_bin,Nobs,Nsamples)
-#print('PS_nsv_ens.shape=', PS_nsv_ens.shape)
 PS_signal_mock_std = np.std(PS_nsv_ens,axis=0)
 
 random.seed(0)
@@ -96,6 +93,7 @@ print('Mock data prepared')
 #Find all of the datasets for the interpolation
 files = glob.glob(path_LOS+'*.dat')
 
+#Remove files if needed
 files_to_remove = glob.glob(path_LOS+'*fXnone*.dat')
 for i in range(len(files_to_remove)):
    files.remove(files_to_remove[i])
@@ -111,11 +109,9 @@ for j in range(len(files)):
    data = np.fromfile(str(files[j]),dtype=np.float32)
    logfX[j] = data[9]
    xHI_mean[j] = data[11]
-   #print('f_X=%.2f, <x_HI,box>=%.8f' % (logfX[j],xHI_mean[j]))
 
    #Read data for signal
    datafile = str('1DPS_dimensionless/1DPS_signal/power_spectrum_signal_21cmFAST_200Mpc_z%.1f_fX%.2f_xHI%.2f_%dkHz_%dLOS.dat' % (z_name,logfX[j],xHI_mean[j],spec_res,Nlos))
-   #datafile = str('1DPS_dimensionless/1DPS_signalandnoise/power_spectrum_signal_21cmFAST_50Mpc_z%.1f_fX%.2f_xHI%.2f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_%dLOS.dat' % (z_name,logfX[j],xHI_mean[j],telescope,spec_res,tint,S147,alphaR,Nlos))
    data = np.fromfile(str(datafile),dtype=np.float32)
    Nlos = int(data[0])
    n_kbins = int(data[1])
@@ -171,19 +167,21 @@ fig = plt.figure(figsize=(10.,5.))
 gs = gridspec.GridSpec(1,1)
 ax0 = plt.subplot(gs[0,0])
 
+#Plot mock observation data
 ax0.errorbar(k_bins_cent,PS_signal_mock,yerr=PS_signal_mock_std,fmt=' ',marker='o',capsize=5,color='darkorange',label='Mock data')
 ax0.plot([1e-20,1e-20],[1e-20,2e-20],'-',linewidth=2,color='fuchsia',label='Inferred')
 ax0.plot([1e-20,1e-20],[1e-20,2e-20],'-',color='royalblue',alpha=0.5,label='Posterior draws')
 plt.legend(frameon=False,loc='lower right',fontsize=fsize-3)
 
+#Plot posterior draws PS
 for i in range(len(xHI_draws)):
    ax0.plot(k_bins_cent,inter_fun_PS21(xHI_draws[i],logfX_draws[i]),'-',color='royalblue',alpha=0.5,label='Posterior draws')
 
+#Plot inferred PS
 ax0.plot(k_bins_cent,inter_fun_PS21(xHI_inf,logfX_inf),'-',linewidth=2,color='fuchsia',label='Inferred')
 
 ax0.set_xlim(0.25,np.ceil(k_bins_cent[-1]))
 ax0.set_ylim(1e-7,3e-6)
-#ax0.set_yticks(np.arange(0.97,1.031,0.01))
 ax0.set_xscale('log')
 ax0.set_yscale('log')
 ax0.set_xlabel(r'$k \,\rm [MHz^{-1}]$', fontsize=fsize)
@@ -201,12 +199,9 @@ plt.savefig('1DPS_plots/power_spectrum_mockandinf_200Mpc_z%.1f_xHI%.2f_fX%.1f_%s
 plt.close()
 
 
+#Plot corner plot for the inferred and posterior draws PS
 fsize = 14
-
 fig, axes = plt.subplots(2,sharex=True, figsize=(5.,5.))
-#gs = gridspec.GridSpec(1,1)
-#ax0 = plt.subplot(gs[0,0])
-
 min_logfX = -4.
 max_logfX = 1.
 labels = [r"$\langle x_{\rm HI}\rangle$",r"$\mathrm{log}_{10}(f_{\mathrm{X}})$"]

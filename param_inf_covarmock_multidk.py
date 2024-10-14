@@ -26,13 +26,14 @@ import instrumental_features
 from numpy import random
 import time
 start_clock = time.perf_counter()
+
 #Input parameters
 z_name = float(sys.argv[1])         #redshift
 dvH = float(sys.argv[2])            #used rebinning for line profile convolution in m/s
 spec_res = float(sys.argv[3])       #spectral resolution of the telescope in kHz
 xHI_mean_mock = float(sys.argv[4])  #mock HI fraction
 logfX_mock = float(sys.argv[5])     #mock logfX
-path_LOS = '../../datasets/21cmFAST_los/los/'
+path_LOS = '/datasets/21cmFAST_los/los/'
 telescope = str(sys.argv[6])
 S147 = float(sys.argv[7])           #intrinsic flux density of background source at 147MHz in mJy
 alphaR = float(sys.argv[8])         #radio spectrum power-law index of background source
@@ -46,22 +47,16 @@ Nsamples = 10000
 
 min_logfX = -4.
 max_logfX = 1.
-#min_fX = 0.0001
-#max_fX = 10.
 min_xHI = 0.01
 max_xHI = 0.99
 
 #Find all of the datasets for the interpolation
 files = glob.glob(path_LOS+'*.dat')
 
+#Remove files if needed
 files_to_remove = glob.glob(path_LOS+'*fXnone*.dat')
 for i in range(len(files_to_remove)):
    files.remove(files_to_remove[i])
-
-'''
-files = ['../../datasets/21cmFAST_los/los/los_50Mpc_256_n1000_z6.000_fX-3.0_xHI0.11.dat'
-        ,'../../datasets/21cmFAST_los/los/los_50Mpc_256_n1000_z6.000_fX-3.0_xHI0.61.dat']
-'''
 
 Nkbins_all = [6]
 
@@ -80,70 +75,6 @@ for Nkbins_i in range(len(Nkbins_all)):
   k_bins = np.power(10.,log_k_bins)
   k_bins_cent = np.power(10.,log_k_bins+d_log_k_bins/2.)[:-1]
   print(k_bins_cent)
-
-  '''
-  #Read the signal only data for which we want to estimate parameters
-  datafile = str('1DPS_dimensionless/1DPS_signal/power_spectrum_signal_21cmFAST_200Mpc_z%.1f_fX%.2f_xHI%.2f_%dkHz_%dLOS.dat' % (z_name,logfX_mock,xHI_mean_mock,spec_res,Nlos))
-  data = np.fromfile(str(datafile),dtype=np.float32)
-  Nlos = int(data[0])
-  n_kbins = int(data[1])
-  k = data[2:2+n_kbins]
-  PS_sv = data[2+n_kbins+0*n_kbins*Nlos:2+n_kbins+1*n_kbins*Nlos]
-  PS_sv = np.reshape(PS_sv,(Nlos,n_kbins))[:n_los,:]
-
-  #Bin the PS data
-  PS_sv_bin = np.empty((n_los,len(k_bins_cent)))
-
-  for i in range(n_los):
-    for l in range(len(k_bins_cent)):
-      ind = np.where((k>=k_bins[l]) & (k<k_bins[l+1]))[0]
-      PS_sv_bin[i,l] = np.mean(PS_sv[i,ind])
-
-  #Get mean for each k bin assuming observation of multiple LOS
-  PS_sv_ens = instrumental_features.multi_obs(PS_sv_bin,Nobs,Nsamples)
-  PS_sv_mean = np.mean(PS_sv_ens,axis=0)
-
-  random.seed(0)
-
-  LOS = random.randint(0,Nlos-1,size=Nobs)
-  signal_multiobs = PS_sv_bin[LOS][:]
-  signal_multiobs_mean_sv = np.mean(signal_multiobs,axis=0)
-
-  #Compute covariance matrix for sample variance only
-  Mcovar_sv = np.cov(np.transpose(PS_sv_ens))
-
-
-
-  #Read data for noise only
-  datafile = str('1DPS_dimensionless/1DPS_noise/power_spectrum_noise_21cmFAST_200Mpc_z%.1f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_%dLOS.dat' % (z_name,telescope,spec_res,tint,S147,alphaR,Nlos))
-  data = np.fromfile(str(datafile),dtype=np.float32)
-  n_kbins = int(data[1])
-  k = data[2:2+n_kbins]
-  PS_noise = data[2+n_kbins+0*n_kbins*Nlos:2+n_kbins+1*n_kbins*Nlos]
-  PS_noise = np.reshape(PS_noise,(Nlos,n_kbins))
-
-  #Bin the PS data
-  PS_noise_bin = np.empty((Nlos,len(k_bins_cent)))
-
-  for i in range(Nlos):
-    for l in range(len(k_bins_cent)):
-      ind = np.where((k>=k_bins[l]) & (k<k_bins[l+1]))[0]
-      PS_noise_bin[i,l] = np.mean(PS_noise[i,ind])
-
-  #Get ensemble of observations of multiple LOS
-  #sig_PS_noise = np.std(PS_noise_bin,axis=0)
-  PS_noise_ens = instrumental_features.multi_obs(PS_noise_bin,Nobs,Nsamples)
-
-  random.seed(0)
-
-  LOS = random.randint(0,Nlos-1,size=Nobs)
-  signal_multiobs = PS_noise_bin[LOS][:]
-  signal_multiobs_mean_noise= np.mean(signal_multiobs,axis=0)
-
-  #Compute covariance matrix for noise only
-  Mcovar_noise = np.cov(np.transpose(PS_noise_ens))
-  '''
-
 
   #Read the mock (signal+noise) data for which we want to estimate parameters
   datafile = str('1DPS_dimensionless/1DPS_signalandnoise/power_spectrum_signal_21cmFAST_200Mpc_z%.1f_fX%.2f_xHI%.2f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_%dLOS.dat' % (z_name,logfX_mock,xHI_mean_mock,telescope,spec_res,tint,S147,alphaR,Nlos))
@@ -164,7 +95,6 @@ for Nkbins_i in range(len(Nkbins_all)):
 
   #Get mean for each k bin assuming observation of multiple LOS
   PS_nsv_ens = instrumental_features.multi_obs(PS_nsv_bin,Nobs,Nsamples)
-  #print('PS_nsv_ens.shape=', PS_nsv_ens.shape)
   PS_nsv_mean = np.mean(PS_nsv_ens,axis=0)
 
   random.seed(0)
@@ -182,16 +112,6 @@ for Nkbins_i in range(len(Nkbins_all)):
   PS_mock_mean = signal_multiobs_mean_mock
 
   print('Mcovar.shape=', Mcovar.shape)
-  #print(Mcovar)
-
-
-  #Define (negative) likelihood function
-  #def log_likelihood(P21_mock,P21_sim,sig_P21):
-      #xHI_mean1, logfX1 = theta 
-      #inter_fun_sig = interpolate.LinearNDInterpolator(np.transpose([xHI_mean,logfX]),sig_PS_signal_sim)
-      #sig_inter = inter_fun_sig(para)
-      #return 0.5*np.sum((P21_mock-P21_sim)**2/sig_P21**2+np.log(2*np.pi*sig_P21**2))
-
   print('Covariance matrix and mock data prepared')
 
   stop_clock = time.perf_counter()
@@ -208,11 +128,9 @@ for Nkbins_i in range(len(Nkbins_all)):
       data = np.fromfile(str(files[j]),dtype=np.float32)
       logfX[j] = data[9]
       xHI_mean[j] = data[11]
-      #print('f_X=%.2f, <x_HI,box>=%.8f' % (logfX[j],xHI_mean[j]))
 
       #Read data for signal
       datafile = str('1DPS_dimensionless/1DPS_signal/power_spectrum_signal_21cmFAST_200Mpc_z%.1f_fX%.2f_xHI%.2f_%dkHz_%dLOS.dat' % (z_name,logfX[j],xHI_mean[j],spec_res,Nlos))
-      #datafile = str('1DPS_dimensionless/1DPS_signalandnoise/power_spectrum_signal_21cmFAST_50Mpc_z%.1f_fX%.2f_xHI%.2f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_%dLOS.dat' % (z_name,logfX[j],xHI_mean[j],telescope,spec_res,tint,S147,alphaR,Nlos))
       data = np.fromfile(str(datafile),dtype=np.float32)
       Nlos = int(data[0])
       n_kbins = int(data[1])
@@ -242,16 +160,8 @@ for Nkbins_i in range(len(Nkbins_all)):
   array = np.append(array,PS_sim_mean)
   array.astype('float32').tofile('1DPS_dimensionless/kP21_sim_200Mpc_z%.1f_%dkHz_Nobs%d_Nsamples%d.dat' % (z_name,spec_res,Nobs,Nsamples),sep='')
 
-  '''
-  datafile = str('1DPS_dimensionless/kP21_sim_200Mpc_z%.1f_%dkHz_Nobs%d_Nsamples%d.dat' % (z_name,spec_res,Nobs,Nsamples))
-  data = np.fromfile(str(datafile),dtype=np.float32)
-  xHI_mean = data[0*len(files):1*len(files)]
-  logfX    = data[1*len(files):2*len(files)]
-  PS_sim_mean = np.reshape(data[2*len(files):],(len(files),len(k_bins_cent)+1))[:,1:-1]
-  '''
   #Set up N-dimensional linear interpolator for calculating P21 for any parameter values within the range given in the prior function
   #inter_fun_likelihood = interpolate.LinearNDInterpolator(np.transpose([xHI_mean,logfX]),Likelihood)
-  #fX = np.power(10.,logfX)
   inter_fun_PS21 = interpolate.LinearNDInterpolator(np.transpose([xHI_mean,logfX]),PS_sim_mean)
 
   print('Interpolator set up')
@@ -271,7 +181,6 @@ for Nkbins_i in range(len(Nkbins_all)):
   slope_cut = (0.81-0.99)/(max_logfX-logfX_cut_min)
   def log_prior(theta):
       xHI_mean1, logfX1 = theta
-      #if min_xHI <= xHI_mean1 <= max_xHI and min_fX <= fX1 <= max_fX:
       if min_xHI <= xHI_mean1 <= max_xHI and min_logfX <= logfX1 < logfX_cut_min:
         return 0
       elif logfX_cut_min <= logfX1 <= max_logfX and min_xHI <= xHI_mean1 <= 0.99+slope_cut*(logfX1-logfX_cut_min):
@@ -311,16 +220,15 @@ for Nkbins_i in range(len(Nkbins_all)):
 
   initial = np.array([0.3,-2.2])# + 0.1 * np.random.randn(2)
   soln = minimize(log_likelihood, initial, args=(PS_mock_mean,Mcovar),bounds=([min_xHI,max_xHI],[min_logfX,max_logfX]))
-  if soln.x[0]==0.01:
-     soln.x[0] = 0.05
-  if soln.x[1]==1.:
-     soln.x[1] = 0.9
-  elif soln.x[1]==-4.:
-     soln.x[1] = -3.5
+  #if soln.x[0]==0.01:
+  #   soln.x[0] = 0.05
+  #elif soln.x[1]==1.:
+  #   soln.x[1] = 0.9
+  #elif soln.x[1]==-4.:
+  #   soln.x[1] = -3.5
   print(soln.x)
 
   para0 = soln.x+1e-4*np.random.randn(n_walk, ndim)
-  #para0 = np.array([0.3,-2.2])+1e-4*np.random.randn(n_walk, ndim)
   sampler = emcee.EnsembleSampler(n_walk, ndim, log_posterior, args=(PS_mock_mean,Mcovar))
   state=sampler.run_mcmc(para0, Nsteps, progress=True)
   samples = sampler.get_chain()
@@ -340,7 +248,7 @@ for Nkbins_i in range(len(Nkbins_all)):
 
   suffix = '200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps' % (xHI_mean_mock,logfX_mock,telescope,spec_res,S147,alphaR,tint,d_log_k_bins,len(k_bins_cent),Nsteps)
 
-  plt.savefig('MCMC_samples/test/MCMCchains_%s.png' % suffix)
+  plt.savefig('plots/MCMCchains_%s.png' % suffix)
   #plt.show()
   plt.close()
 
@@ -350,9 +258,6 @@ for Nkbins_i in range(len(Nkbins_all)):
   print('Autocorrelation time for fX:  %d' % tau[1])
 
   para_mean=np.zeros(ndim)
-  #Discard first 200 steps from the MCMC which corresponds to 5x the burn-in time
-  #noflat_samples = sampler.get_chain(discard=20, thin=50)
-  #np.save('noflatsamp_1e12all',noflat_samples)
 
   #Flatten the MCMC
   flat_samples = sampler.get_chain(discard=500, thin=50, flat=True)
@@ -370,18 +275,16 @@ for Nkbins_i in range(len(Nkbins_all)):
   np.save('MCMC_samples/flatsamp_%s.npy' % suffix,array)
 
   #Present the result in corner plot using corner package (Foreman-Mackey et al. 2023) at https://corner.readthedocs.io/en/latest/
-  #fig,axes = plt.subplots(ndim,ndim,sharex=True,figsize=(10.,10.))
   sett=dict(fontsize=14)
   fig=corner.corner(flat_samples,range=[[0.,1.],[min_logfX,max_logfX]],color='royalblue',smooth=True,labels=labels,label_kwargs=sett
                                     ,show_titles=True,title_fmt='.3f',title_kwargs=sett,truths=para_mean,truth_color='fuchsia')
 
-  #fX_mock = np.power(10.,logfX_mock)
   corner.overplot_points(fig=fig,xs=[[np.nan,np.nan],[np.nan,np.nan],[xHI_mean_mock,logfX_mock],[np.nan,np.nan]],marker='x',markersize=10,markeredgewidth=3,color='darkorange')
 
   stop_clock = time.perf_counter()
   time_taken = (stop_clock-start_clock)
   print('It took %.3fs of your life' % time_taken)
 
-  plt.savefig('MCMC_samples/test/inferred_param_%s.png' % suffix)
+  plt.savefig('plots/inferred_param_%s.png' % suffix)
   #plt.show()
   plt.close()
