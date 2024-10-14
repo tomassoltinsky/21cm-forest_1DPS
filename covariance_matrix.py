@@ -5,21 +5,11 @@ Version 6.5.2024
 
 """
 
-import sys
-import glob, os
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 import scipy.signal as scisi
 from astropy.convolution import convolve, Box1DKernel
-from matplotlib.ticker import AutoMinorLocator
-from matplotlib import gridspec
-import openpyxl
-import time
 from scipy import interpolate
 from scipy.optimize import minimize
-import emcee
-import corner
 from numpy import random
 
 import numpy.linalg #import inv, det, multi_dot
@@ -39,7 +29,7 @@ def multi_obs(signal,N_obs,N_samples):
 
 
 
-#Calculate the covariance matrices
+#Calculate the covariance matrix
 def covar_matrix(signal_mock_ens,signal_sim_ens):
   
   Ndim = signal_sim_ens.shape[1]
@@ -51,7 +41,7 @@ def covar_matrix(signal_mock_ens,signal_sim_ens):
 
   return covariance
 
-#Calculate the correllation matrice
+#Calculate the correllation matrix
 def corr_matrix(covariance):
   
   Ndim = len(covariance)
@@ -82,8 +72,6 @@ def log_likelihood(signal_mock_ens,signal_mock_mean,signal_sim_ens,signal_sim_me
   #print(covar_mat)
   #print(covar_mat_det)
   #print(covar_mat_inv)
-
   #print(np.linalg.multi_dot([covar_mat,covar_mat_inv]))
-
 
   return 0.5*np.linalg.multi_dot([d_mat_T,covar_mat_inv,d_mat])+np.log(np.power(2*np.pi,Ndim)*np.absolute(covar_mat_det))
