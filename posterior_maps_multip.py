@@ -104,6 +104,7 @@ for i in range(len(files_to_remove)):
 
 logfX = np.empty(len(files))
 xHI_mean = np.empty(len(files))
+TK_mean = np.empty(len(files))
 T_HI = np.empty(len(files))
 
 for j in range(len(files)):
@@ -121,6 +122,24 @@ for j in range(len(files)):
   ind_neu = np.where(xHI>=0.9)[0]
   T_HI[j] = np.mean(TK[ind_neu])
 
+#Save the array of properties of the IGM into file for later use
+array = np.array([len(files)])
+array = np.append(array,xHI_mean)
+array = np.append(array,logfX)
+array = np.append(array,TK_mean)
+array = np.append(array,T_HI)
+array.astype('float32').tofile('datasets/interpolators/IGMprop_200Mpc_z%.1f.dat' % (z_name),sep='')
+
+#Read the data for the interpolator
+datafile = str('datasets/interpolators/IGMprop_200Mpc_z%.1f.dat' % (z_name))
+data = np.fromfile(str(datafile),dtype=np.float32)
+Nmodels = int(data[0])
+xHI_mean = data[1:(Nmodels+1)]
+logfX = data[(Nmodels+1):(2*Nmodels+1)]
+TK = data[(2*Nmodels+1):(3*Nmodels+1)]
+T_HI = data[(3*Nmodels+1):(4*Nmodels+1)]
+
+#Setup the interpolator
 inter_fun_fx = interpolate.LinearNDInterpolator(np.transpose([xHI_mean,T_HI]),logfX)
 
 print('T_HI=%.2f-%.2f' % (np.amin(T_HI),np.amax(T_HI)))
@@ -138,6 +157,15 @@ logfX_up = inter_fun_fx(xHI,T_HI)
 #Plot literature range of values for logfX
 ax0.fill_between(xHI,logfX_down,logfX_up,alpha=0.2,color=colours_lit[3])
 ax0.text(0.75,-0.75,'HERA+23',color=colours_lit[3],fontsize=12)
+
+#Read the data for the null-detection limits
+datafile = str('interpolators/nulldetection_limits_200Mpc_z%.1f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_Nobs%d_Nkbins%d.dat' % (z_name,telescope,spec_res,tint,S147,alphaR,10,Nkbins))
+data = np.fromfile(str(datafile),dtype=np.float32)
+xHI_lim_68 = np.reshape(data,(4,-1))[0]
+logfX_lim_68 = np.reshape(data,(4,-1))[1]
+
+#Plot the 68% confidence limits
+ax0.plot(xHI_lim_68,logfX_lim_68,linestyle='-',color='black',linewidth=1.5)
 
 plt.tight_layout()
 plt.savefig('plots/multiparam_infer_%dNkbins_%s_%dhr_withobs_moreparams_test.png' % (Nkbins,telescope,tint))
