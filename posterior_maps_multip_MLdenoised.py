@@ -86,16 +86,16 @@ ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,le
 
 #Plot the x_HI measurements from the Lyα forest
 colours_lit = ['grey','brown','darkviolet','navy']
-rot = 55
+rot = 60
 
 ax0.axvspan(0.21-0.07,0.21+0.17,alpha=0.2,color=colours_lit[0])
-ax0.text(0.15,-1.5,'Ďurovčíková+24',color=colours_lit[0],rotation=rot,fontsize=12)  #Ďurovčíková et al. 2024, ApJ, 969, 162
+ax0.text(0.15,-1.8,'Ďurovčíková+24',color=colours_lit[0],rotation=rot,fontsize=12)  #Ďurovčíková et al. 2024, ApJ, 969, 162
 
 ax0.axvspan(0.17-0.11,0.17+0.09,alpha=0.2,color=colours_lit[1])
-ax0.text(0.08,-1.5,'Gaikwad+23',color=colours_lit[1],rotation=rot,fontsize=12)      #Gaikwad et al. 2023, MNRAS, 525, 4093
+ax0.text(0.08,-1.8,'Gaikwad+23',color=colours_lit[1],rotation=rot,fontsize=12)      #Gaikwad et al. 2023, MNRAS, 525, 4093
 
 ax0.axvspan(0,0.21,alpha=0.2,color=colours_lit[2])
-ax0.text(0.005,-1.5,'Greig+24',color=colours_lit[2],rotation=rot,fontsize=12)       #Greig et al. 2024, MNRAS, 530, 3208
+ax0.text(0.005,-1.8,'Greig+24',color=colours_lit[2],rotation=rot,fontsize=12)       #Greig et al. 2024, MNRAS, 530, 3208
 
 
 
