@@ -72,7 +72,7 @@ print(xHI_infer)
 print(logfX_infer)
 
 #Compute the goodness metric
-score = np.sum((xHI_infer-xHI_mean)**2+(logfX_infer-logfX)**2)/len(logfX)
+score = np.sqrt(np.mean((xHI_infer-xHI_mean)**2+(logfX_infer-logfX)**2))
 print('Score=%.6f' % score)
 
 #Make the plot look nice
