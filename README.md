@@ -1,6 +1,8 @@
 # 21cm-forest_1DPS
 Codes to model the 21-cm forest signal and computate the 21-cm forest 1D power spectrum
 
+Used in Šoltinský et al. 2025, MNRAS, 537, 1, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
+
 <br /> 
 
 Codes include:
