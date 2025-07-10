@@ -1,0 +1,336 @@
+2025-04-13 13:35:26 INFO     Commandline: ./f21_predict_unet_with_dense.py --limitsamplesize 200 --psbatchsize 1 --scale_y --runmode train_test --label with dense --t_int 50 --epochs 35 -p /user1/21cm_forest/21cmFAST_los/F21_noisy/ --input_points_to_use 2560
+2025-04-13 13:35:26 INFO     input_points=2560, kernel1=256, step=4
+2025-04-13 13:35:26 INFO     Loading files with pattern /user1/21cm_forest/21cmFAST_los/F21_noisy/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t50h_Smin64.2mJy_alphaR-0.44.dat
+2025-04-13 13:35:27 INFO     Found 534 files matching pattern
+2025-04-13 13:35:27 INFO     Loading files with pattern /user1/21cm_forest/21cmFAST_los/F21_noisy/F21_signalonly_21cmFAST_200Mpc_z6.0_fX*_xHI*_8kHz.dat
+2025-04-13 13:35:27 INFO     Found 534 files matching pattern
+2025-04-13 13:35:27 INFO     ####
+2025-04-13 13:35:27 INFO     ### Using "cpu" device ###
+2025-04-13 13:35:27 INFO     ####
+2025-04-13 13:35:27 INFO     Loading train dataset 522
+2025-04-13 13:36:03 INFO     Finished data loading.
+2025-04-13 13:36:03 INFO     sample los:[0.99926764 0.9962251  0.99878395 ... 1.0116184  1.0171806  1.0231435 ]
+2025-04-13 13:36:03 INFO     sample params:[ 0.04835174 -0.2       ]
+2025-04-13 13:36:03 INFO     
+Combined data shape: (104400, 2762)
+2025-04-13 13:36:03 INFO     Combined parameters shape: (104400, 2)
+2025-04-13 13:36:39 INFO     Finished data loading.
+2025-04-13 13:36:39 INFO     sample los:[1. 1. 1. ... 1. 1. 1.]
+2025-04-13 13:36:39 INFO     sample params:[ 0.09718798 -0.2       ]
+2025-04-13 13:36:39 INFO     
+Combined data shape: (104400, 2762)
+2025-04-13 13:36:39 INFO     Combined parameters shape: (104400, 2)
+2025-04-13 13:36:39 INFO     Reordering.. 104400, 104400, 104400
+2025-04-13 13:36:39 INFO     Reordering sample keys.. ['0.10_-0.20_0' '0.05_-0.20_0' '0.10_-0.20_1' '0.10_-0.20_2'
+ '0.29_-0.20_0' '0.25_-0.20_0' '0.05_-0.20_1' '0.25_-0.20_1'
+ '0.15_-0.20_0' '0.25_-0.20_2'], ['0.05_-0.20_0' '0.05_-0.20_1' '0.10_-0.20_0' '0.10_-0.20_1'
+ '0.05_-0.20_2' '0.05_-0.20_3' '0.05_-0.20_4' '0.00_-0.20_0'
+ '0.10_-0.20_2' '0.05_-0.20_5']
+2025-04-13 13:36:40 INFO     Loaded datasets X_train:(104400, 2762) y_train:(104400, 2) y_train_so:(104400, 2762)
+2025-04-13 13:36:40 INFO     Loading test dataset 12
+2025-04-13 13:36:41 INFO     Finished data loading.
+2025-04-13 13:36:41 INFO     sample los:[0.988523   1.0037014  1.0189153  ... 0.99341613 0.9878842  0.9976588 ]
+2025-04-13 13:36:41 INFO     sample params:[ 0.10639009 -1.        ]
+2025-04-13 13:36:41 INFO     
+Combined data shape: (2400, 2762)
+2025-04-13 13:36:41 INFO     Combined parameters shape: (2400, 2)
+2025-04-13 13:36:42 INFO     Finished data loading.
+2025-04-13 13:36:42 INFO     sample los:[0.9999971  0.99999917 0.99999976 ... 1.         1.         1.        ]
+2025-04-13 13:36:42 INFO     sample params:[ 0.25369188 -2.        ]
+2025-04-13 13:36:42 INFO     
+Combined data shape: (2400, 2762)
+2025-04-13 13:36:42 INFO     Combined parameters shape: (2400, 2)
+2025-04-13 13:36:42 INFO     Reordering.. 2400, 2400, 2400
+2025-04-13 13:36:42 INFO     Reordering sample keys.. ['0.25_-2.00_0' '0.25_-2.00_1' '0.25_-2.00_2' '0.25_-2.00_3'
+ '0.25_-2.00_4' '0.25_-2.00_5' '0.25_-2.00_6' '0.25_-2.00_7'
+ '0.25_-2.00_8' '0.25_-2.00_9'], ['0.11_-1.00_0' '0.11_-1.00_1' '0.11_-2.00_0' '0.52_-1.00_0'
+ '0.11_-2.00_1' '0.11_-2.00_2' '0.52_-1.00_1' '0.11_-2.00_3'
+ '0.11_-1.00_2' '0.80_-2.00_0']
+2025-04-13 13:36:42 INFO     Loaded dataset X_test:(2400, 2762) y_test:(2400, 2) y_test_so:(2400, 2762)
+2025-04-13 13:36:42 INFO     Starting new run: Commandline: ./f21_predict_unet_with_dense.py --limitsamplesize 200 --psbatchsize 1 --scale_y --runmode train_test --label with dense --t_int 50 --epochs 35 -p /user1/21cm_forest/21cmFAST_los/F21_noisy/ --input_points_to_use 2560. Parameters: epochs: 35, batch_size: 32, lr: 0.0001, kernel_sizes: [256, 256], dropout: 0.2, points: 2560, label=with dense
+2025-04-13 13:36:42 INFO     Before scale train: [[ 0.04835174 -0.2       ]]
+2025-04-13 13:36:42 INFO     After scale train: [[0.04835174 0.76      ]]
+2025-04-13 13:36:42 INFO     Starting training. (104400, 2560),(104400, 2),(104400, 2560)
+2025-04-13 13:36:43 INFO     Shape of inputs, outputs: torch.Size([104400, 1, 2560]), torch.Size([104400, 2560])
+2025-04-13 13:36:43 INFO     Created model: UnetModel(
+  (enc1): Sequential(
+    (0): Conv1d(1, 64, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(64, 64, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (enc2): Sequential(
+    (0): Conv1d(64, 128, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(128, 128, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (enc3): Sequential(
+    (0): Conv1d(128, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(256, 256, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (enc4): Sequential(
+    (0): Conv1d(256, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(512, 512, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (fc1): Linear(in_features=5120, out_features=256, bias=True)
+  (fc2): Linear(in_features=256, out_features=5120, bias=True)
+  (unflatten): Unflatten(dim=1, unflattened_size=(512, 10))
+  (dec0): Sequential(
+    (0): ConvTranspose1d(1024, 256, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (dec1): Sequential(
+    (0): ConvTranspose1d(512, 128, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (dec2): Sequential(
+    (0): ConvTranspose1d(256, 64, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (dec3): Sequential(
+    (0): ConvTranspose1d(128, 32, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (final): Sequential(
+    (0): Conv1d(32, 1, kernel_size=(1,), stride=(1,))
+    (1): Flatten(start_dim=1, end_dim=-1)
+  )
+)
+2025-04-13 13:37:01 INFO     Shape of input_batch, output_batch: torch.Size([32, 1, 2560]), torch.Size([32, 2560])
+2025-04-13 13:43:13 INFO     Epoch [1/35], Loss: 5062.96950666
+2025-04-13 13:49:17 INFO     Epoch [2/35], Loss: 1147.18229366
+2025-04-13 13:55:17 INFO     Epoch [3/35], Loss: 474.52277965
+2025-04-13 14:01:20 INFO     Epoch [4/35], Loss: 135.58447927
+2025-04-13 14:07:23 INFO     Epoch [5/35], Loss: 17.96456453
+2025-04-13 14:07:24 INFO     Timing Information:
+Encoder 1 time: 260.5943s
+Encoder 2 time: 152.1619s
+Encoder 3 time: 101.1953s
+Encoder 4 time: 79.1522s
+Dense time: 12.9435s
+Decoder 0 time: 26.9660s
+Decoder 1 time: 22.8142s
+Decoder 1 Concat time: 2.5930s
+Decoder 2 time: 33.3316s
+Decoder 2 Concat time: 5.2255s
+Decoder 3 time: 65.8491s
+Overall time for forward pass: 781.5512s
+
+2025-04-13 14:07:24 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 14:07:24 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 14:07:24 INFO     Testing prediction
+2025-04-13 14:07:24 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 14:07:24 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 14:07:24 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 14:07:26 INFO     Test Loss: 50.92696381
+2025-04-13 14:07:27 INFO     R2 Score: 0.6394220590591431
+2025-04-13 14:07:27 INFO     RMS Error: 8.003825e-06
+2025-04-13 14:07:44 ERROR    An error occurred: Contour levels must be increasing
+2025-04-13 14:14:18 INFO     Epoch [6/35], Loss: 1.27725825
+2025-04-13 14:20:56 INFO     Epoch [7/35], Loss: 0.67310791
+2025-04-13 14:27:30 INFO     Epoch [8/35], Loss: 0.59861397
+2025-04-13 14:34:04 INFO     Epoch [9/35], Loss: 0.56363282
+2025-04-13 14:40:38 INFO     Epoch [10/35], Loss: 0.54691088
+2025-04-13 14:40:38 INFO     Timing Information:
+Encoder 1 time: 556.9271s
+Encoder 2 time: 307.9687s
+Encoder 3 time: 202.7490s
+Encoder 4 time: 158.4730s
+Dense time: 25.4720s
+Decoder 0 time: 53.4204s
+Decoder 1 time: 45.5342s
+Decoder 1 Concat time: 5.4519s
+Decoder 2 time: 74.7761s
+Decoder 2 Concat time: 18.0877s
+Decoder 3 time: 169.1761s
+Overall time for forward pass: 1664.6071s
+
+2025-04-13 14:40:38 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 14:40:38 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 14:40:38 INFO     Testing prediction
+2025-04-13 14:40:38 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 14:40:38 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 14:40:38 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 14:40:40 INFO     Test Loss: 35.19715118
+2025-04-13 14:40:40 INFO     R2 Score: 0.7433707118034363
+2025-04-13 14:40:40 INFO     RMS Error: 5.5751457e-06
+2025-04-13 14:40:57 ERROR    An error occurred: Contour levels must be increasing
+2025-04-13 14:47:01 INFO     Epoch [11/35], Loss: 0.53567827
+2025-04-13 14:53:08 INFO     Epoch [12/35], Loss: 0.52714425
+2025-04-13 14:59:13 INFO     Epoch [13/35], Loss: 0.52238614
+2025-04-13 15:05:13 INFO     Epoch [14/35], Loss: 0.51832161
+2025-04-13 15:11:14 INFO     Epoch [15/35], Loss: 0.51497454
+2025-04-13 15:11:14 INFO     Timing Information:
+Encoder 1 time: 813.5722s
+Encoder 2 time: 458.1160s
+Encoder 3 time: 304.6323s
+Encoder 4 time: 237.7326s
+Dense time: 37.9439s
+Decoder 0 time: 79.6488s
+Decoder 1 time: 67.8000s
+Decoder 1 Concat time: 8.0308s
+Decoder 2 time: 107.9746s
+Decoder 2 Concat time: 23.2241s
+Decoder 3 time: 232.7630s
+Overall time for forward pass: 2436.6288s
+
+2025-04-13 15:11:14 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 15:11:14 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 15:11:14 INFO     Testing prediction
+2025-04-13 15:11:14 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 15:11:14 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 15:11:14 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 15:11:17 INFO     Test Loss: 34.09206390
+2025-04-13 15:11:17 INFO     R2 Score: 0.751087486743927
+2025-04-13 15:11:17 INFO     RMS Error: 5.4033653e-06
+2025-04-13 15:11:32 ERROR    An error occurred: Contour levels must be increasing
+2025-04-13 15:17:31 INFO     Epoch [16/35], Loss: 0.51180113
+2025-04-13 15:23:31 INFO     Epoch [17/35], Loss: 0.50908279
+2025-04-13 15:29:30 INFO     Epoch [18/35], Loss: 0.50516816
+2025-04-13 15:37:08 INFO     Epoch [19/35], Loss: 0.50042519
+2025-04-13 15:45:23 INFO     Epoch [20/35], Loss: 0.49747641
+2025-04-13 15:45:23 INFO     Timing Information:
+Encoder 1 time: 1095.6021s
+Encoder 2 time: 623.8120s
+Encoder 3 time: 417.0961s
+Encoder 4 time: 327.8423s
+Dense time: 51.7516s
+Decoder 0 time: 110.5157s
+Decoder 1 time: 94.0086s
+Decoder 1 Concat time: 10.9865s
+Decoder 2 time: 145.8103s
+Decoder 2 Concat time: 29.0068s
+Decoder 3 time: 304.0974s
+Overall time for forward pass: 3295.7699s
+
+2025-04-13 15:45:23 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 15:45:23 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 15:45:23 INFO     Testing prediction
+2025-04-13 15:45:23 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 15:45:23 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 15:45:23 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 15:45:26 INFO     Test Loss: 36.05810165
+2025-04-13 15:45:26 INFO     R2 Score: 0.7344561815261841
+2025-04-13 15:45:26 INFO     RMS Error: 5.73125e-06
+2025-04-13 15:45:46 ERROR    An error occurred: Contour levels must be increasing
+2025-04-13 15:53:46 INFO     Epoch [21/35], Loss: 0.49321405
+2025-04-13 16:01:54 INFO     Epoch [22/35], Loss: 0.49060598
+2025-04-13 16:10:16 INFO     Epoch [23/35], Loss: 0.48857834
+2025-04-13 16:18:20 INFO     Epoch [24/35], Loss: 0.48745651
+2025-04-13 16:26:16 INFO     Epoch [25/35], Loss: 0.48605812
+2025-04-13 16:26:16 INFO     Timing Information:
+Encoder 1 time: 1429.7795s
+Encoder 2 time: 815.7853s
+Encoder 3 time: 547.3535s
+Encoder 4 time: 435.8492s
+Dense time: 67.9740s
+Decoder 0 time: 148.5284s
+Decoder 1 time: 126.6869s
+Decoder 1 Concat time: 14.5762s
+Decoder 2 time: 190.8547s
+Decoder 2 Concat time: 35.9050s
+Decoder 3 time: 387.1695s
+Overall time for forward pass: 4307.7535s
+
+2025-04-13 16:26:16 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 16:26:16 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 16:26:16 INFO     Testing prediction
+2025-04-13 16:26:16 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 16:26:16 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 16:26:16 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 16:26:19 INFO     Test Loss: 39.06057739
+2025-04-13 16:26:20 INFO     R2 Score: 0.7104924917221069
+2025-04-13 16:26:20 INFO     RMS Error: 6.2201143e-06
+2025-04-13 16:26:37 ERROR    An error occurred: Contour levels must be increasing
+2025-04-13 16:34:40 INFO     Epoch [26/35], Loss: 0.48449916
+2025-04-13 16:42:59 INFO     Epoch [27/35], Loss: 0.48209703
+2025-04-13 16:51:00 INFO     Epoch [28/35], Loss: 0.47949922
+2025-04-13 16:59:14 INFO     Epoch [29/35], Loss: 0.47790057
+2025-04-13 17:07:08 INFO     Epoch [30/35], Loss: 0.47614527
+2025-04-13 17:07:08 INFO     Timing Information:
+Encoder 1 time: 1761.8152s
+Encoder 2 time: 1007.5829s
+Encoder 3 time: 678.3299s
+Encoder 4 time: 543.7982s
+Dense time: 84.0529s
+Decoder 0 time: 187.0809s
+Decoder 1 time: 159.7640s
+Decoder 1 Concat time: 18.1285s
+Decoder 2 time: 236.6628s
+Decoder 2 Concat time: 42.8637s
+Decoder 3 time: 470.9769s
+Overall time for forward pass: 5320.5934s
+
+2025-04-13 17:07:08 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 17:07:08 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 17:07:08 INFO     Testing prediction
+2025-04-13 17:07:08 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 17:07:08 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 17:07:08 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 17:07:11 INFO     Test Loss: 38.89646912
+2025-04-13 17:07:11 INFO     R2 Score: 0.7118679285049438
+2025-04-13 17:07:11 INFO     RMS Error: 6.19387e-06
+2025-04-13 17:07:29 ERROR    An error occurred: Contour levels must be increasing
+2025-04-13 17:15:23 INFO     Epoch [31/35], Loss: 0.47471698
+2025-04-13 17:23:15 INFO     Epoch [32/35], Loss: 0.47335683
+2025-04-13 17:31:08 INFO     Epoch [33/35], Loss: 0.47253989
+2025-04-13 17:39:07 INFO     Epoch [34/35], Loss: 0.47168596
+2025-04-13 17:46:59 INFO     Epoch [35/35], Loss: 0.47069944
+2025-04-13 17:46:59 INFO     Timing Information:
+Encoder 1 time: 2084.4501s
+Encoder 2 time: 1196.0964s
+Encoder 3 time: 806.9224s
+Encoder 4 time: 649.0387s
+Dense time: 99.8465s
+Decoder 0 time: 222.8864s
+Decoder 1 time: 191.2969s
+Decoder 1 Concat time: 21.6155s
+Decoder 2 time: 281.2931s
+Decoder 2 Concat time: 49.6124s
+Decoder 3 time: 553.8341s
+Overall time for forward pass: 6308.8647s
+
+2025-04-13 17:46:59 INFO     Starting testing. (2400, 2560),(2400, 2),(2400, 2560)
+2025-04-13 17:46:59 INFO     Testing dataset: X:(2400, 2560) y:(2400, 2)
+2025-04-13 17:46:59 INFO     Testing prediction
+2025-04-13 17:46:59 INFO     Appending channel with shape: (2400, 2560)
+2025-04-13 17:46:59 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([2400, 1, 2560]), Y: torch.Size([2400, 2560])
+2025-04-13 17:46:59 INFO     Shape of test_input, test_output: torch.Size([2400, 1, 2560]), torch.Size([2400, 2560])
+2025-04-13 17:47:02 INFO     Test Loss: 40.77876663
+2025-04-13 17:47:02 INFO     R2 Score: 0.6950520873069763
+2025-04-13 17:47:02 INFO     RMS Error: 6.513532e-06
+2025-04-13 17:47:19 ERROR    An error occurred: Contour levels must be increasing
