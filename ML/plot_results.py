@@ -444,7 +444,7 @@ def hist2d(x, y, bins=20, range=None, weights=None, levels=None, smooth=None,
     contour_cmap = [list(rgba_color) for l in levels] + [list(rgba_color)]
     for i, l in enumerate(levels):
         contour_cmap[i][-1] *= float(i) / (len(levels)+1)
-        print(f'contour_cmap[{i}][-1]= {contour_cmap[i][-1]}')
+        #print(f'contour_cmap[{i}][-1]= {contour_cmap[i][-1]}')
 
     # We'll make the 2D histogram to directly estimate the density.
     try:
