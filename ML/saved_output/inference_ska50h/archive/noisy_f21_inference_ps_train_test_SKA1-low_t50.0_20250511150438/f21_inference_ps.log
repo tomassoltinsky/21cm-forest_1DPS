@@ -1,0 +1,22 @@
+2025-05-11 15:04:38 INFO     Commandline: f21_inference_ps.py --t_int 50 --telescope SKA1-low --limitsamplesize 600
+2025-05-11 15:04:38 INFO     ####
+2025-05-11 15:04:38 INFO     ### Using "mps" device ###
+2025-05-11 15:04:38 INFO     ####
+2025-05-11 15:04:38 INFO     Loading training data...
+2025-05-11 15:04:38 INFO     Loading files with pattern saved_output/train_test_psbs_dump/noisy_ska/f21_ps_dum_train_test_SKA1-low_t50.0_20250511105922/ps/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_SKA1-low_8kHz_t50h_Smin64.2mJy_alphaR-0.44.csv
+2025-05-11 15:04:38 INFO     Found 529 files matching pattern
+2025-05-11 15:04:42 INFO     Training data shape: X=(31740, 16), y=(31740, 2)
+2025-05-11 15:04:42 INFO     Loading test data...
+2025-05-11 15:04:42 INFO     Loading files with pattern saved_output/train_test_psbs_dump/noisy_ska/f21_ps_dum_train_test_SKA1-low_t50.0_20250511105922/test_ps/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_SKA1-low_8kHz_t50h_Smin64.2mJy_alphaR-0.44.csv
+2025-05-11 15:04:42 INFO     Found 5 files matching pattern
+2025-05-11 15:04:43 INFO     Test data shape: X=(50000, 16), y=(50000, 2)
+2025-05-11 15:04:43 INFO     Training XGBoost model...
+2025-05-11 15:04:43 INFO     Making predictions...
+2025-05-11 15:04:43 INFO     
+Model Performance:
+2025-05-11 15:04:43 INFO     R2 Score: 0.7204
+2025-05-11 15:04:43 INFO     MSE: 0.1256
+2025-05-11 15:04:43 INFO     RMSE: 0.3544
+2025-05-11 15:04:43 INFO     Saved test results to output/f21_inference_ps_train_test_SKA1-low_t50.0_20250511150438/test_results.csv
+2025-05-11 15:04:45 INFO     
+Results saved to output/f21_inference_ps_train_test_SKA1-low_t50.0_20250511150438
