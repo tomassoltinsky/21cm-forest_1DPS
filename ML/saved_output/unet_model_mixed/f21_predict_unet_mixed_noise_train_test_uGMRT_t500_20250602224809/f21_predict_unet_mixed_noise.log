@@ -1,0 +1,185 @@
+2025-06-02 22:48:09 INFO     Commandline: ./f21_predict_unet_mixed_noise.py --limitsamplesize 100 --psbatchsize 1 --scale_y --runmode train_test --label mixed noise -p /user1/21cm_forest/21cmFAST_los/F21_noisy/ --input_points_to_use 2560
+2025-06-02 22:48:09 INFO     input_points=2560, kernel1=256, step=4
+2025-06-02 22:48:09 INFO     Loading files with pattern /user1/21cm_forest/21cmFAST_los/F21_noisy/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t50h_Smin64.2mJy_alphaR-0.44.dat
+2025-06-02 22:48:09 INFO     Found 534 files matching pattern
+2025-06-02 22:48:09 INFO     Loading files with pattern /user1/21cm_forest/21cmFAST_los/F21_noisy/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t500h_Smin64.2mJy_alphaR-0.44.dat
+2025-06-02 22:48:09 INFO     Found 534 files matching pattern
+2025-06-02 22:48:09 INFO     Loading files with pattern /user1/21cm_forest/21cmFAST_los/F21_noisy/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_SKA1-low_8kHz_t50h_Smin64.2mJy_alphaR-0.44.dat
+2025-06-02 22:48:09 INFO     Found 534 files matching pattern
+2025-06-02 22:48:09 INFO     Loading files with pattern /user1/21cm_forest/21cmFAST_los/F21_noisy/F21_signalonly_21cmFAST_200Mpc_z6.0_fX*_xHI*_8kHz.dat
+2025-06-02 22:48:09 INFO     Found 534 files matching pattern
+2025-06-02 22:48:09 INFO     ####
+2025-06-02 22:48:09 INFO     ### Using "cpu" device ###
+2025-06-02 22:48:09 INFO     ####
+2025-06-02 22:48:09 INFO     Loading train dataset 1566
+2025-06-02 22:49:13 INFO     Finished data loading.
+2025-06-02 22:49:13 INFO     sample los:[0.99250275 0.9914157  0.9859298  ... 1.0060912  0.99629325 1.0103159 ]
+2025-06-02 22:49:13 INFO     sample params:[ 0.18962675 -0.2       ]
+2025-06-02 22:49:13 INFO     
+Combined data shape: (156600, 2762)
+2025-06-02 22:49:13 INFO     Combined parameters shape: (156600, 2)
+2025-06-02 22:50:09 INFO     Finished data loading.
+2025-06-02 22:50:09 INFO     sample los:[1. 1. 1. ... 1. 1. 1.]
+2025-06-02 22:50:09 INFO     sample params:[ 0.24985562 -0.2       ]
+2025-06-02 22:50:09 INFO     
+Combined data shape: (156600, 2762)
+2025-06-02 22:50:09 INFO     Combined parameters shape: (156600, 2)
+2025-06-02 22:50:10 INFO     Reordering.. 156600, 156600, 156600
+2025-06-02 22:50:10 INFO     Reordering sample keys.. ['0.25_-0.20_0' '0.00_-0.20_0' '0.00_-0.20_1' '0.35_-0.20_0'
+ '0.29_-0.20_0' '0.19_-0.20_0' '0.25_-0.20_1' '0.05_-0.20_0'
+ '0.00_-0.20_2' '0.19_-0.20_1'], ['0.19_-0.20_0' '0.25_-0.20_0' '0.05_-0.20_0' '0.19_-0.20_1'
+ '0.19_-0.20_2' '0.05_-0.20_1' '0.25_-0.20_1' '0.35_-0.20_0'
+ '0.29_-0.20_0' '0.35_-0.20_1']
+2025-06-02 22:50:11 INFO     Loaded datasets X_train:(156600, 2762) y_train:(156600, 2) y_train_so:(156600, 2762)
+2025-06-02 22:50:11 INFO     Loading test dataset 36
+2025-06-02 22:50:13 INFO     Finished data loading.
+2025-06-02 22:50:13 INFO     sample los:[0.988523   1.0037014  1.0189153  ... 0.99341613 0.9878842  0.9976588 ]
+2025-06-02 22:50:13 INFO     sample params:[ 0.10639009 -1.        ]
+2025-06-02 22:50:13 INFO     
+Combined data shape: (3600, 2762)
+2025-06-02 22:50:13 INFO     Combined parameters shape: (3600, 2)
+2025-06-02 22:50:14 INFO     Finished data loading.
+2025-06-02 22:50:14 INFO     sample los:[1. 1. 1. ... 1. 1. 1.]
+2025-06-02 22:50:14 INFO     sample params:[ 0.10639009 -1.        ]
+2025-06-02 22:50:14 INFO     
+Combined data shape: (3600, 2762)
+2025-06-02 22:50:14 INFO     Combined parameters shape: (3600, 2)
+2025-06-02 22:50:14 INFO     Reordering.. 3600, 3600, 3600
+2025-06-02 22:50:14 INFO     Reordering sample keys.. ['0.11_-1.00_0' '0.11_-1.00_1' '0.52_-1.00_0' '0.25_-2.00_0'
+ '0.80_-1.00_0' '0.11_-2.00_0' '0.80_-2.00_0' '0.25_-1.00_0'
+ '0.52_-1.00_1' '0.11_-2.00_1'], ['0.11_-1.00_0' '0.11_-1.00_1' '0.11_-1.00_2' '0.11_-1.00_3'
+ '0.11_-1.00_4' '0.11_-1.00_5' '0.11_-1.00_6' '0.11_-1.00_7'
+ '0.11_-1.00_8' '0.11_-1.00_9']
+2025-06-02 22:50:14 INFO     Loaded dataset X_test:(3600, 2762) y_test:(3600, 2) y_test_so:(3600, 2762)
+2025-06-02 22:50:14 INFO     Starting new run: Commandline: ./f21_predict_unet_mixed_noise.py --limitsamplesize 100 --psbatchsize 1 --scale_y --runmode train_test --label mixed noise -p /user1/21cm_forest/21cmFAST_los/F21_noisy/ --input_points_to_use 2560. Parameters: epochs: 15, batch_size: 32, lr: 0.0001, kernel_sizes: [256, 256], dropout: 0.2, points: 2560, label=mixed noise
+2025-06-02 22:50:14 INFO     Before scale train: [[ 0.18962675 -0.2       ]]
+2025-06-02 22:50:14 INFO     After scale train: [[0.18962675 0.76      ]]
+2025-06-02 22:50:14 INFO     Starting training. (156600, 2560),(156600, 2),(156600, 2560)
+2025-06-02 22:50:15 INFO     Shape of inputs, outputs: torch.Size([156600, 1, 2560]), torch.Size([156600, 2560])
+2025-06-02 22:50:15 INFO     Created model: UnetModel(
+  (enc1): Sequential(
+    (0): Conv1d(1, 64, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(64, 64, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (enc2): Sequential(
+    (0): Conv1d(64, 128, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(128, 128, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (enc3): Sequential(
+    (0): Conv1d(128, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(256, 256, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (enc4): Sequential(
+    (0): Conv1d(256, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Conv1d(512, 512, kernel_size=(3,), stride=(1,), padding=(1,))
+    (5): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): MaxPool1d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+  )
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (fc1): Linear(in_features=5120, out_features=256, bias=True)
+  (fc2): Linear(in_features=256, out_features=5120, bias=True)
+  (unflatten): Unflatten(dim=1, unflattened_size=(512, 10))
+  (dec0): Sequential(
+    (0): ConvTranspose1d(1024, 256, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (dec1): Sequential(
+    (0): ConvTranspose1d(512, 128, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (dec2): Sequential(
+    (0): ConvTranspose1d(256, 64, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (dec3): Sequential(
+    (0): ConvTranspose1d(128, 32, kernel_size=(4,), stride=(4,))
+    (1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+  )
+  (final): Sequential(
+    (0): Conv1d(32, 1, kernel_size=(1,), stride=(1,))
+    (1): Flatten(start_dim=1, end_dim=-1)
+  )
+)
+2025-06-02 22:50:16 INFO     Shape of input_batch, output_batch: torch.Size([32, 1, 2560]), torch.Size([32, 2560])
+2025-06-02 23:01:57 INFO     Epoch [1/15], Loss: 10503.98183248
+2025-06-02 23:13:39 INFO     Epoch [2/15], Loss: 1457.93782178
+2025-06-02 23:25:34 INFO     Epoch [3/15], Loss: 367.78619704
+2025-06-02 23:37:24 INFO     Epoch [4/15], Loss: 45.83797922
+2025-06-02 23:49:13 INFO     Epoch [5/15], Loss: 0.96760864
+2025-06-03 00:01:10 INFO     Epoch [6/15], Loss: 0.44758700
+2025-06-03 00:12:57 INFO     Epoch [7/15], Loss: 0.39082367
+2025-06-03 00:24:40 INFO     Epoch [8/15], Loss: 0.35817098
+2025-06-03 00:36:27 INFO     Epoch [9/15], Loss: 0.33234849
+2025-06-03 00:48:01 INFO     Epoch [10/15], Loss: 0.31766871
+2025-06-03 00:48:01 INFO     Timing Information:
+Encoder 1 time: 948.2390s
+Encoder 2 time: 576.9260s
+Encoder 3 time: 383.8932s
+Encoder 4 time: 320.4770s
+Dense time: 48.2133s
+Decoder 0 time: 118.8952s
+Decoder 1 time: 93.7487s
+Decoder 1 Concat time: 10.4518s
+Decoder 2 time: 123.9258s
+Decoder 2 Concat time: 19.4612s
+Decoder 3 time: 235.5227s
+Overall time for forward pass: 2945.8409s
+
+2025-06-03 00:48:01 INFO     Starting testing. (3600, 2560),(3600, 2),(3600, 2560), output/f21_predict_unet_mixed_noise_train_test_uGMRT_t500_20250602224809/ep10
+2025-06-03 00:48:01 INFO     Testing dataset: X:(3600, 2560) y:(3600, 2)
+2025-06-03 00:48:01 INFO     Testing prediction
+2025-06-03 00:48:01 INFO     Appending channel with shape: (3600, 2560)
+2025-06-03 00:48:02 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([3600, 1, 2560]), Y: torch.Size([3600, 2560])
+2025-06-03 00:48:02 INFO     Shape of test_input, test_output: torch.Size([3600, 1, 2560]), torch.Size([3600, 2560])
+2025-06-03 00:48:07 INFO     Test Loss: 28.92398262
+2025-06-03 00:48:08 INFO     R2 Score: 0.8537564277648926
+2025-06-03 00:48:08 INFO     RMS Error: 3.0442309e-06
+2025-06-03 00:48:36 ERROR    An error occurred: Contour levels must be increasing
+2025-06-03 01:00:02 INFO     Epoch [11/15], Loss: 0.31009363
+2025-06-03 01:11:33 INFO     Epoch [12/15], Loss: 0.30232119
+2025-06-03 01:23:03 INFO     Epoch [13/15], Loss: 0.29737932
+2025-06-03 01:34:24 INFO     Epoch [14/15], Loss: 0.29220146
+2025-06-03 01:45:46 INFO     Epoch [15/15], Loss: 0.28646510
+2025-06-03 01:45:46 INFO     Starting testing. (3600, 2560),(3600, 2),(3600, 2560), output/f21_predict_unet_mixed_noise_train_test_uGMRT_t500_20250602224809
+2025-06-03 01:45:46 INFO     Testing dataset: X:(3600, 2560) y:(3600, 2)
+2025-06-03 01:45:46 INFO     Testing prediction
+2025-06-03 01:45:46 INFO     Appending channel with shape: (3600, 2560)
+2025-06-03 01:45:46 INFO     convert_to_pytorch_tensors: shape of tensors: X:torch.Size([3600, 1, 2560]), Y: torch.Size([3600, 2560])
+2025-06-03 01:45:46 INFO     Shape of test_input, test_output: torch.Size([3600, 1, 2560]), torch.Size([3600, 2560])
+2025-06-03 01:45:50 INFO     Test Loss: 27.59610367
+2025-06-03 01:45:50 INFO     R2 Score: 0.8588676452636719
+2025-06-03 01:45:50 INFO     RMS Error: 2.9129696e-06
