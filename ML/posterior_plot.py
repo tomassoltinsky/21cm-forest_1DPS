@@ -105,9 +105,11 @@ tint = args.t_int
 
 #Start plotting
 fsize = 20
-colours  = ['royalblue','fuchsia','forestgreen','darkorange','red','lightcoral','slateblue','limegreen','teal','navy']
-
-fig = plt.figure(figsize=(5.,5.))
+#colours  = ['royalblue','fuchsia','forestgreen','darkorange','red','lightcoral','slateblue','limegreen','teal','navy']
+colours = ['#1A9892', '#44328E', '#9E0142', '#216633', '#08306B']
+colours = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+#sec_colours = ['#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5']
+fig = plt.figure(figsize=(8.,8.))
 gs = gridspec.GridSpec(1,1)
 ax0 = plt.subplot(gs[0,0])
 print(f"loading result file using pattern {args.filepath}")
@@ -124,7 +126,9 @@ logfX_infer = np.empty(len(logfX))
 xHI_infer = np.empty(len(logfX))
 for i in range(len(logfX)):
    #Plot the posterior distributions from the MCMC using corner package (Foreman-Mackey 2016, The Journal of Open Source Software, 1, 24)
-   corner.hist2d(xHI_mean_post[i],logfX_post[i],levels=[1-np.exp(-0.5),1-np.exp(-2.)],plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[i])#,contourf_kwargs=contkwarg)
+   pltr.hist2d(xHI_mean_post[i],logfX_post[i], smooth=False,levels=[1-np.exp(-0.5),1-np.exp(-2.)],
+               plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[i],
+               contour_kwargs={'zorder': 1, 'linewidths': 1.})#,contourf_kwargs=contkwarg)
    #Read the best fit values from the MCMC
    logfX_infer[i] = np.median(logfX_post[i])
    xHI_infer[i] = np.median(xHI_mean_post[i])
@@ -160,7 +164,7 @@ ax0.set_ylim(-4,-0.4)
 ax0.xaxis.set_minor_locator(AutoMinorLocator())
 ax0.yaxis.set_minor_locator(AutoMinorLocator())
 ax0.set_xlabel(r'$\langle x_{\rm HI}\rangle$', fontsize=fsize)
-ax0.set_ylabel(r'$\log_{10}(f_{\mathrm{X}})$', fontsize=fsize)
+ax0.set_ylabel(r'$\log_{10}f_{\mathrm{X}}$', fontsize=fsize)
 ax0.tick_params(axis='x',which='major',direction='in',bottom=True,top=True,left=True,right=True
       ,length=10,width=1,labelsize=fsize)
 ax0.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=True,right=True
@@ -170,14 +174,35 @@ ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,le
 #Plot the x_HI measurements from the Lyα forest
 colours_lit = ['grey','brown','darkviolet','navy']
 rot = 60
+"""
 ax0.axvspan(0.21-0.07,0.21+0.17,alpha=0.2,color=colours_lit[0])
 ax0.text(0.15,-1.8,'Ďurovčíková+24',color=colours_lit[0],rotation=rot,fontsize=12)  #Ďurovčíková et al. 2024, ApJ, 969, 162
 ax0.axvspan(0.17-0.11,0.17+0.09,alpha=0.2,color=colours_lit[1])
 ax0.text(0.08,-1.8,'Gaikwad+23',color=colours_lit[1],rotation=rot,fontsize=12)      #Gaikwad et al. 2023, MNRAS, 525, 4093
 ax0.axvspan(0,0.21,alpha=0.2,color=colours_lit[2])
 ax0.text(0.005,-1.8,'Greig+24',color=colours_lit[2],rotation=rot,fontsize=12)       #Greig et al. 2024, MNRAS, 530, 3208
+"""
 #Complete plotting and save
-plt.title(r'%s, %d hr, $G=%.2f$' % (telescope,tint,g_score), fontsize=fsize)
+plt.title(r'%s %d hr, $z=6$' % (telescope,tint), fontsize=fsize)
+#Make the plot look nice
+        
+ax0.set_xticks(np.arange(0.,0.9,0.2))
+ax0.set_yticks(np.arange(-4.,0.1,1.))
+ax0.set_xlim(0.,1.)
+ax0.set_ylim(-4,0.8)
+ax0.xaxis.set_minor_locator(AutoMinorLocator())
+ax0.yaxis.set_minor_locator(AutoMinorLocator())
+ax0.tick_params(axis='x',which='major',direction='in',bottom=True,top=True,left=True,right=True
+        ,length=10,width=1,labelsize=fsize)
+ax0.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=True,right=True
+        ,length=10,width=1,labelsize=fsize)
+ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
+        ,length=5,width=1)
+
+for tick in ax0.xaxis.get_majorticklabels():
+    tick.set_horizontalalignment("left")
+for tick in ax0.yaxis.get_majorticklabels():
+    tick.set_verticalalignment("bottom")
 
 plt.tight_layout()
 plt.savefig('%s/multiparam_infer_unet_%s_%dhr_%dsteps.pdf' % ("./tmp_out", telescope,tint,Nsteps), format='pdf')
