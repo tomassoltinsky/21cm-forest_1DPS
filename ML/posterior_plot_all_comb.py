@@ -98,6 +98,11 @@ Nsteps = 10000
 fsize = 22
 #fsize_meas = 9
 colours  = ['royalblue','fuchsia','forestgreen','darkorange','red','lightcoral','slateblue','limegreen','teal','navy']
+colours = ['#1A9892', '#44328E', '#9E0142', '#216633', '#08306B']
+sec_colours = ['#8ED8D5', '#B7B0D9', '#ED9EC9', '#A2DA8A', '#6BAED6']
+
+colours = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+sec_colours = ['#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5']
 
 #base.initplt()
 plt.rcParams['figure.figsize'] = [5., 5.]
@@ -122,34 +127,47 @@ d_log_k_bins = 0.25
 xHI_mean = [0.11,0.80,0.52,0.11,0.80]
 logfX    = [-1.0,-1.0,-2.0,-3.0,-3.0]
 
+def compute_pvalue_for_group(predictions, true_value):
+    """
+    Empirical two-sided p-value: fraction of predictions
+    more extreme than the observed true value.
+    """
+    mean_pred = np.mean(predictions)
+    deviation_true = np.abs(true_value - mean_pred)
+    deviations_preds = np.abs(predictions - mean_pred)
+    p_value = np.mean(deviations_preds >= deviation_true)
+    return p_value
+
 for i in range(5):
     for j in range(3):
         ax0 = axes[i,j]
         g_score = 0.0
+        f_score = 0.0
+        x_score = 0.0
         if i <= 1:
             xHI_true = np.empty(len(xHI_mean))
             logfX_true = np.empty(len(logfX))
             for k in range(len(logfX)):
 
-                data = np.fromfile('../soltinky/21cm-forest_1DPS/datasets/21cmFAST_los/los/los_50Mpc_256_n1000_z6.000_fX%.1f_xHI%.2f.dat' % (logfX[k],xHI_mean[k]),dtype=np.float32)
+                data = np.fromfile('../datasets/21cmFAST_los/los/los_50Mpc_256_n1000_z6.000_fX%.1f_xHI%.2f.dat' % (logfX[k],xHI_mean[k]),dtype=np.float32)
                 logfX_true[k] = data[9]
                 xHI_true[k] = data[11]
 
             contkwarg = dict(alpha=[0.,0.25,0.5])
             telescope, tint = ['uGMRT', 'uGMRT', 'SKA1-low'][j], [50, 500, 50][j]
             folder, tag = folders[i], tags[i]
-            print('Telescope: %s, integration time: %d hr' % (telescope,tint))
+            #print('Telescope: %s, integration time: %d hr' % (telescope,tint))
             logfX_infer = np.empty(len(logfX))
             xHI_infer = np.empty(len(logfX))
             std_xHI = np.empty(len(logfX))
             std_logfX = np.empty(len(logfX))
 
             for k in range(len(logfX)):
-                filename = '../soltinky/21cm-forest_1DPS/MCMC_samples/%sflatsamp_%s200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps.npy' % (folder,tag,xHI_mean[k],logfX[k],telescope,spec_res,S147,alphaR,tint,d_log_k_bins,Nkbins,NstepsMC)
-                print(f'loading {filename}')
+                filename = '../MCMC_samples/%sflatsamp_%s200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps.npy' % (folder,tag,xHI_mean[k],logfX[k],telescope,spec_res,S147,alphaR,tint,d_log_k_bins,Nkbins,NstepsMC)
+                #print(f'loading {filename}')
                 data = np.load(filename)
-                pltr.hist2d(data[autocorr_cut:,0],data[autocorr_cut:,1],ax=ax0, levels=[1-np.exp(-0.5),1-np.exp(-2.)],
-                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k],
+                pltr.hist2d(data[autocorr_cut:,0],data[autocorr_cut:,1],ax=ax0, smooth=True, levels=[1-np.exp(-0.5),1-np.exp(-2.)],
+                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k], sec_colour=sec_colours[k],
                             contour_kwargs={'zorder': 1, 'linewidths': 1.})#,contourf_kwargs=contkwarg)
 
                 logfX_infer[k] = data[0,1]
@@ -171,20 +189,24 @@ for i in range(5):
                 print(logfX_infer)
                 """
 
-            g_score = np.sqrt(np.mean((xHI_infer-xHI_true)**2+(logfX_infer-logfX_true)**2))
-            print('g_score       = %.6f' % g_score)
+            #g_score = np.sqrt(np.mean((xHI_infer[1:]-xHI_true[1:])**2+(logfX_infer[1:]-logfX_true[1:])**2))
+            #Compute the goodness metric
+            f_score = np.sqrt(np.mean((((logfX_infer-logfX)**2))))
+            x_score = np.sqrt(np.mean((((xHI_infer-xHI_mean)**2))))
+            g_score = np.sqrt(np.mean((xHI_infer-xHI_mean)**2+((logfX_infer-logfX)**2)/25.0))
+            print('g_score = %.6f' % g_score)
 
         if i > 1:
             tele = teles[j]
             feat = feats[i-2]
             filepath = f"saved_output/inference_{tele}/{feat}*/test_results.csv"
-            print(filepath)
+            #print(filepath)
             file = glob.glob(filepath)[0]
 
             #Plot the x_HI measurements from the Lyα forest
             #ax0.axvspan(0,0.21+0.17,alpha=0.2,color='grey')
             #ax0.text(0.025, -3.82,r'Limit from Ly$\alpha$ data',color='darkgrey',fontsize=fsize_meas)       #Greig et al. 2024, MNRAS, 530, 3208
-            print(f"loading result file: {file}")
+            #print(f"loading result file: {file}")
             all_results = np.loadtxt(file, delimiter=",", skiprows=1)
 
             xHI_mean = np.reshape(all_results[:,2],(-1,Nsteps))[:,0]
@@ -200,11 +222,11 @@ for i in range(5):
 
             logfX_infer = np.empty(len(logfX))
             xHI_infer = np.empty(len(logfX))
-
+            p_values = np.empty(len(logfX))
             for k in range(len(logfX)):
                 #Plot the posterior distributions using corner package (Foreman-Mackey 2016, The Journal of Open Source Software, 1, 24)
-                pltr.hist2d(xHI_mean_post[k],logfX_post[k],ax=ax0,levels=[1-np.exp(-0.5),1-np.exp(-2.)],
-                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k],
+                pltr.hist2d(xHI_mean_post[k],logfX_post[k],ax=ax0, smooth=True,levels=[1-np.exp(-0.5),1-np.exp(-2.)],
+                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k], sec_colour=sec_colours[k],
                             contour_kwargs={'zorder': 1, 'linewidths': 1.} )#,contourf_kwargs=contkwarg)
 
                 #Read the best fit values (median)
@@ -214,6 +236,11 @@ for i in range(5):
                 #Plot the best fit and true values
                 ax0.scatter(xHI_infer[k],logfX_infer[k],marker='o',s=400,linewidths=1.,color=colours[k],edgecolors='black',alpha=1)
                 ax0.scatter(xHI_mean[k],logfX[k],marker='*',s=400,linewidths=1.,color=colours[k],edgecolors='black',alpha=1)
+                x_p_value = compute_pvalue_for_group(xHI_mean_post[k], xHI_mean[k])
+                f_p_value = compute_pvalue_for_group(logfX_post[k], logfX[k])
+                #print(f"p-value for xHI: {x_p_value}")
+                #print(f"p-value for fX: {f_p_value}")
+                p_values[k] = 0.5*(f_p_value + x_p_value)
 
             print('Mock xHI and fX values')
             print(xHI_mean)
@@ -223,8 +250,10 @@ for i in range(5):
             print(logfX_infer)
 
             #Compute the goodness metric
-            g_score = np.sqrt(np.mean((xHI_infer-xHI_mean)**2+(logfX_infer-logfX)**2))
-            print('G-Score=%.6f' % g_score)
+            f_score = np.sqrt(np.mean((((logfX_infer-logfX)**2))))
+            x_score = np.sqrt(np.mean((((xHI_infer-xHI_mean)**2))))
+            g_score = np.sqrt(np.mean((xHI_infer-xHI_mean)**2+((logfX_infer-logfX)**2)/25.0))
+            print('G-Score=%.6f, p-value=%.6f, f-Score=%.6f, x-Score=%.6f' % (g_score, np.mean(p_values), f_score, x_score))
 
 
         #Make the plot look nice
@@ -232,7 +261,7 @@ for i in range(5):
         ax0.set_xticks(np.arange(0.,0.9,0.2))
         ax0.set_yticks(np.arange(-4.,0.1,1.))
         ax0.set_xlim(0.,1.)
-        ax0.set_ylim(-4,-0.4)
+        ax0.set_ylim(-4,0.8)
         ax0.xaxis.set_minor_locator(AutoMinorLocator())
         ax0.yaxis.set_minor_locator(AutoMinorLocator())
 
@@ -245,16 +274,16 @@ for i in range(5):
 
         #set title
         title = ''
-        score_str = rf'$G={g_score:.2f}$'
+        score_str = rf'$G={g_score:.2f}, f={f_score:.2f}, x={x_score:.2f}$'
             
         for tick in ax0.xaxis.get_majorticklabels():
             tick.set_horizontalalignment("left")
         for tick in ax0.yaxis.get_majorticklabels():
             tick.set_verticalalignment("bottom")
         
-        
+        """
         ax0.text(
-            0.38, -3.75,  # x, y position
+            0.1, -3.75,  # x, y position
             score_str,
             fontsize=fsize,
             color='black',
@@ -264,22 +293,22 @@ for i in range(5):
                 edgecolor='black'    # Optional border
             )
         )
-        
+        """
         
 #axes[1,0].setylabel(r'$\log_{10}f_{\mathrm{X}}$', fontsize=fsize)
 #axes[2,1].set_xlabel(r'$\langle x_{\rm HI}\rangle$', fontsize=fsize)
 fig.supylabel(r'$\log_{10}f_{\mathrm{X}}$', fontsize=fsize)
 fig.supxlabel(r'$\langle x_{\rm HI}\rangle$', fontsize=fsize)
 axes[0,2].yaxis.set_label_position('right')
-axes[0,2].set_ylabel('Method A1', fontsize=fsize)
+axes[0,2].set_ylabel('Method A1', fontsize=fsize, fontweight='bold', labelpad=30, rotation=270)
 axes[1,2].yaxis.set_label_position('right')
-axes[1,2].set_ylabel('Method A2', fontsize=fsize)
+axes[1,2].set_ylabel('Method A2', fontsize=fsize, fontweight='bold', labelpad=30, rotation=270)
 axes[2,2].yaxis.set_label_position('right')
-axes[2,2].set_ylabel('Method B1', fontsize=fsize)
+axes[2,2].set_ylabel('Method B1', fontsize=fsize, fontweight='bold', labelpad=30, rotation=270)
 axes[3,2].yaxis.set_label_position('right')
-axes[3,2].set_ylabel('Method B2', fontsize=fsize)
+axes[3,2].set_ylabel('Method B2', fontsize=fsize, fontweight='bold', labelpad=30, rotation=270)
 axes[4,2].yaxis.set_label_position('right')
-axes[4,2].set_ylabel('Method B3', fontsize=fsize)
+axes[4,2].set_ylabel('Method B3', fontsize=fsize, fontweight='bold', labelpad=30, rotation=270)
             
 axes[0,0].set_title(r'uGMRT$\,50\mathrm{hr}$', fontsize=fsize)
 axes[0,1].set_title(r'uGMRT$\,500\mathrm{hr}$', fontsize=fsize)
