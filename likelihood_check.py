@@ -22,6 +22,8 @@ import emcee
 import corner
 import instrumental_features
 from numpy import random
+random.seed(5)
+np.random.seed(5)
 import time
 import csv
 start_clock = time.perf_counter()
@@ -268,7 +270,7 @@ fsize = 16
 fig = plt.figure(figsize=(5.,5.))
 gs = gridspec.GridSpec(1,1)
 
-ax4 = plt.subplot(gs[0,0])  
+ax = plt.subplot(gs[0,0])  
 
 PS_ens_atk_nsv = np.empty(Nsamples)
 PS_ens_atk_nsub = np.empty(Nsamples)
@@ -276,22 +278,22 @@ for i in range(Nsamples):
    PS_ens_atk_nsv[i] = PS_nsv_ens[i][k_ind]
    PS_ens_atk_nsub[i] = PS_nsub_ens[i][k_ind]
 
-ax4.hist(PS_ens_atk_nsv,bins=PS_bins,density=True,color='royalblue',alpha=0.25,label=r'Sampled $\langle P_{21}^{\rm S+N}\rangle_{10}$')
-ax4.hist(PS_ens_atk_nsub,bins=PS_bins,density=True,color='darkorange',alpha=0.25,label=r'Sampled $\langle P_{21}^{\rm N_{sub}}\rangle_{10}$')
-ax4.plot(PS_bins_cent,likelihood[0],'-',color='fuchsia',label=r'$\mathcal{L}_{\rm B}(P_{21}|\mathbf{\theta})$')
-ax4.legend(frameon=False,loc=[0.1,0.65],fontsize=fsize)
-ax4.set_xlim(0,1.5e-5)
-#ax4.set_xlim(0,.7e-5)
-ax4.set_ylim(0.,5.5e5)
-ax4.set_xlabel(r'$P_{21}(k=%.2f\,\rm MHz^{-1})$' % k_bins_cent[k_ind], fontsize=fsize)
-ax4.set_ylabel(r'$PDF$', fontsize=fsize)
-ax4.xaxis.set_minor_locator(AutoMinorLocator())
-ax4.yaxis.set_minor_locator(AutoMinorLocator())
-ax4.tick_params(axis='x',which='major',direction='in',bottom=True,top=True,left=True,right=True
+ax.hist(PS_ens_atk_nsv,bins=PS_bins,density=True,color='royalblue',alpha=0.25,label=r'Sampled $\langle P_{21}^{\rm S+N}\rangle_{10}$')
+ax.hist(PS_ens_atk_nsub,bins=PS_bins,density=True,color='darkorange',alpha=0.25,label=r'Sampled $\langle P_{21}^{\rm N_{sub}}\rangle_{10}$')
+ax.plot(PS_bins_cent,likelihood[0],'-',color='fuchsia',label=r'$\mathcal{L}_{\rm B}(P_{21}|\mathbf{\theta})$')
+ax.legend(frameon=False,loc=[0.1,0.65],fontsize=fsize)
+ax.set_xlim(0,1.5e-5)
+#ax.set_xlim(0,.7e-5)
+ax.set_ylim(0.,5.5e5)
+ax.set_xlabel(r'$P_{21}(k=%.2f\,\rm MHz^{-1})$' % k_bins_cent[k_ind], fontsize=fsize)
+ax.set_ylabel(r'$PDF$', fontsize=fsize)
+ax.xaxis.set_minor_locator(AutoMinorLocator())
+ax.yaxis.set_minor_locator(AutoMinorLocator())
+ax.tick_params(axis='x',which='major',direction='in',bottom=True,top=True,left=True,right=True
 		,length=20,width=2,labelsize=fsize)
-ax4.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=True,right=True
+ax.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=True,right=True
 		,length=20,width=2,labelsize=fsize)
-ax4.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
+ax.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
 		,length=10,width=2)
 
 plt.tight_layout()
