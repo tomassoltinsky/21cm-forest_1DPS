@@ -1,0 +1,42 @@
+2025-07-09 18:15:15 INFO     Commandline: f21_inference_ps.py --t_int 500 -t uGMRT --limitsamplesize 200
+2025-07-09 18:15:15 INFO     ####
+2025-07-09 18:15:15 INFO     ### Using "mps" device ###
+2025-07-09 18:15:15 INFO     ####
+2025-07-09 18:15:15 INFO     Loading training data...
+2025-07-09 18:15:15 INFO     Loading files with pattern saved_output/train_test_psbs_dump/noisy_500/f21_ps_dum_train_test_uGMRT_t500.0_20250511105815/ps/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t500h_Smin64.2mJy_alphaR-0.44.csv
+2025-07-09 18:15:15 INFO     Found 529 files matching pattern
+2025-07-09 18:15:19 INFO     Training data shape: X=(10580, 16), y=(10580, 2)
+2025-07-09 18:15:19 INFO     Loading test data...
+2025-07-09 18:15:19 INFO     Loading files with pattern saved_output/train_test_psbs_dump/noisy_500/f21_ps_dum_train_test_uGMRT_t500.0_20250511105815/test_ps/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t500h_Smin64.2mJy_alphaR-0.44.csv
+2025-07-09 18:15:19 INFO     Found 5 files matching pattern
+2025-07-09 18:15:19 INFO     Test data shape: X=(50000, 16), y=(50000, 2)
+2025-07-09 18:15:19 INFO     Training XGBoost model...
+2025-07-09 18:15:19 INFO     Fitted regressor: XGBRegressor(base_score=None, booster=None, callbacks=None,
+             colsample_bylevel=None, colsample_bynode=None,
+             colsample_bytree=None, device=None, early_stopping_rounds=None,
+             enable_categorical=False, eval_metric=None, feature_types=None,
+             gamma=None, grow_policy=None, importance_type=None,
+             interaction_constraints=None, learning_rate=None, max_bin=None,
+             max_cat_threshold=None, max_cat_to_onehot=None,
+             max_delta_step=None, max_depth=None, max_leaves=None,
+             min_child_weight=None, missing=nan, monotone_constraints=None,
+             multi_strategy=None, n_estimators=None, n_jobs=None,
+             num_parallel_tree=None, random_state=42, ...)
+2025-07-09 18:15:19 INFO     Booster: <xgboost.core.Booster object at 0x1401ad640>
+2025-07-09 18:15:19 INFO     Feature importance: [0.         0.         0.35440895 0.07680485 0.27611223 0.03814613
+ 0.07335259 0.02736406 0.0221897  0.02867148 0.01942718 0.0179884
+ 0.02498049 0.02140716 0.0191468  0.        ]
+2025-07-09 18:15:19 INFO     Importance type weight: {'f2': 1303.0, 'f3': 987.0, 'f4': 906.0, 'f5': 884.0, 'f6': 812.0, 'f7': 713.0, 'f8': 747.0, 'f9': 716.0, 'f10': 716.0, 'f11': 716.0, 'f12': 695.0, 'f13': 637.0, 'f14': 695.0}
+2025-07-09 18:15:19 INFO     Importance type gain: {'f2': 15.877204895019531, 'f3': 3.440788507461548, 'f4': 12.36958122253418, 'f5': 1.7089123725891113, 'f6': 3.286130428314209, 'f7': 1.2258855104446411, 'f8': 0.9940786957740784, 'f9': 1.2844568490982056, 'f10': 0.8703203201293945, 'f11': 0.8058644533157349, 'f12': 1.1191034317016602, 'f13': 0.9590214490890503, 'f14': 0.8577594757080078}
+2025-07-09 18:15:19 INFO     Importance type cover: {'f2': 693.68994140625, 'f3': 971.6768188476562, 'f4': 1271.73291015625, 'f5': 1349.8212890625, 'f6': 1468.5196533203125, 'f7': 1405.500732421875, 'f8': 1113.991943359375, 'f9': 1564.3323974609375, 'f10': 1364.4091796875, 'f11': 1260.8966064453125, 'f12': 1431.9769287109375, 'f13': 992.328125, 'f14': 1155.3035888671875}
+2025-07-09 18:15:19 INFO     Importance type total_gain: {'f2': 20687.998046875, 'f3': 3396.058349609375, 'f4': 11206.8408203125, 'f5': 1510.6785888671875, 'f6': 2668.337890625, 'f7': 874.0563354492188, 'f8': 742.5767822265625, 'f9': 919.6710815429688, 'f10': 623.1493530273438, 'f11': 576.9989624023438, 'f12': 777.7769165039062, 'f13': 610.8966674804688, 'f14': 596.142822265625}
+2025-07-09 18:15:19 INFO     Importance type total_cover: {'f2': 903878.0, 'f3': 959045.0, 'f4': 1152190.0, 'f5': 1193242.0, 'f6': 1192438.0, 'f7': 1002122.0, 'f8': 832152.0, 'f9': 1120062.0, 'f10': 976917.0, 'f11': 902802.0, 'f12': 995224.0, 'f13': 632113.0, 'f14': 802936.0}
+2025-07-09 18:15:19 INFO     Making predictions...
+2025-07-09 18:15:19 INFO     
+Model Performance:
+2025-07-09 18:15:19 INFO     R2 Score: 0.6673
+2025-07-09 18:15:19 INFO     MSE: 0.1429
+2025-07-09 18:15:19 INFO     RMSE: 0.3780
+2025-07-09 18:15:20 INFO     Saved test results to output/f21_inference_ps_train_test_uGMRT_t500.0_20250709181515/test_results.csv
+2025-07-09 18:15:21 INFO     
+Results saved to output/f21_inference_ps_train_test_uGMRT_t500.0_20250709181515

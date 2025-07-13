@@ -1,0 +1,22 @@
+2025-05-11 18:29:08 INFO     Commandline: f21_inference_ps.py --t_int 500 --limitsamplesize 100
+2025-05-11 18:29:08 INFO     ####
+2025-05-11 18:29:08 INFO     ### Using "mps" device ###
+2025-05-11 18:29:08 INFO     ####
+2025-05-11 18:29:08 INFO     Loading training data...
+2025-05-11 18:29:08 INFO     Loading files with pattern saved_output/train_test_psbs_dump/denoised_500/f21_unet_ps_dum_train_test_uGMRT_t500.0_20250511164401/ps/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t500h_Smin64.2mJy_alphaR-0.44.csv
+2025-05-11 18:29:08 INFO     Found 529 files matching pattern
+2025-05-11 18:29:10 INFO     Training data shape: X=(5290, 16), y=(5290, 2)
+2025-05-11 18:29:10 INFO     Loading test data...
+2025-05-11 18:29:10 INFO     Loading files with pattern saved_output/train_test_psbs_dump/denoised_500/f21_unet_ps_dum_train_test_uGMRT_t500.0_20250511164401/test_ps/F21_noisy_21cmFAST_200Mpc_z6.0_fX*_xHI*_uGMRT_8kHz_t500h_Smin64.2mJy_alphaR-0.44.csv
+2025-05-11 18:29:10 INFO     Found 5 files matching pattern
+2025-05-11 18:29:10 INFO     Test data shape: X=(50000, 16), y=(50000, 2)
+2025-05-11 18:29:10 INFO     Training XGBoost model...
+2025-05-11 18:29:10 INFO     Making predictions...
+2025-05-11 18:29:10 INFO     
+Model Performance:
+2025-05-11 18:29:10 INFO     R2 Score: 0.6340
+2025-05-11 18:29:10 INFO     MSE: 0.1610
+2025-05-11 18:29:10 INFO     RMSE: 0.4012
+2025-05-11 18:29:10 INFO     Saved test results to output/f21_inference_ps_train_test_uGMRT_t500.0_20250511182908/test_results.csv
+2025-05-11 18:29:12 INFO     
+Results saved to output/f21_inference_ps_train_test_uGMRT_t500.0_20250511182908
