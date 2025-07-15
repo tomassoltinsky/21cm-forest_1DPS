@@ -97,7 +97,9 @@ args = parser.parse_args()
 spec_res = 8
 S147 = 64.2
 alphaR = -0.44
-Nsteps = 10000
+Nsteps = 100000
+Nkbins = 6
+d_log_k_bins = 0.25
 
 telescope = args.telescope
 tint = args.t_int
@@ -114,29 +116,36 @@ colours  = ['royalblue','fuchsia','forestgreen','darkorange','red','lightcoral',
 fig = plt.figure(figsize=(8.,8.))
 gs = gridspec.GridSpec(1,1)
 ax0 = plt.subplot(gs[0,0])
+xHI_mean = [0.11,0.80,0.52,0.11,0.80]
+logfX    = [-1.0,-1.0,-2.0,-3.0,-3.0]
 print(f"loading result file using pattern {args.filepath}")
-all_results = np.loadtxt(args.filepath, delimiter=",", skiprows=1)
-xHI_mean = np.reshape(all_results[:,2],(-1,Nsteps))[:,0]
-logfX    = np.reshape(all_results[:,3],(-1,Nsteps))[:,0]
 #print(xHI_mean)
 #print(logfX)
-xHI_mean_post = np.reshape(all_results[:,0],(-1,Nsteps))
-logfX_post = np.reshape(all_results[:,1],(-1,Nsteps))
-print(xHI_mean_post)
-print(logfX_post)
 logfX_infer = np.empty(len(logfX))
 xHI_infer = np.empty(len(logfX))
+
+autocorr_cut = 10000 #cut-off for autocorrelation
+nsub = ''
+if 'noise_sub' in args.filepath:
+    autocorr_cut = 1
+    nsub = '_nsub'
+
+
 for i in range(len(logfX)):
-   #Plot the posterior distributions from the MCMC using corner package (Foreman-Mackey 2016, The Journal of Open Source Software, 1, 24)
-   pltr.hist2d(xHI_mean_post[i],logfX_post[i], smooth=False,levels=[1-np.exp(-0.5),1-np.exp(-2.)],
-               plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[i],
-               contour_kwargs={'zorder': 1, 'linewidths': 1.})#,contourf_kwargs=contkwarg)
-   #Read the best fit values from the MCMC
-   logfX_infer[i] = np.median(logfX_post[i])
-   xHI_infer[i] = np.median(xHI_mean_post[i])
-   #Plot the best fit and true values
-   ax0.scatter(xHI_infer[i],logfX_infer[i],marker='o',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
-   ax0.scatter(xHI_mean[i],logfX[i],marker='*',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
+
+    data = np.load('%s/flatsamp%s_200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps.npy' % (args.filepath,nsub,xHI_mean[i],logfX[i],telescope,spec_res,S147,alphaR,tint,d_log_k_bins,Nkbins,Nsteps))
+    pltr.hist2d(data[autocorr_cut:,0],data[autocorr_cut:,1],ax=ax0,levels=[1-np.exp(-0.5),1-np.exp(-2.)],plot_datapoints=False,
+                plot_density=False,fill_contours=True,color=colours[i],contour_kwargs={'zorder': 1, 'linewidths': 1.})#,contourf_kwargs=contkwarg)
+    #corner.hist2d(data[:,0],data[:,1],levels=[1-np.exp(-0.5),1-np.exp(-2.)],smooth=True,plot_datapoints=True,plot_density=True,color=colours[i])
+
+    logfX_infer[i] = data[0,1]
+    xHI_infer[i] = data[0,0]
+
+for i in range(len(logfX)):
+    ax0.scatter(xHI_infer[i],logfX_infer[i],marker='o',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
+    ax0.scatter(xHI_mean[i],logfX[i],marker='*',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
+
+
 print('Mock xHI and fX values')
 print(xHI_mean)
 print(logfX)
@@ -146,18 +155,6 @@ print(logfX_infer)
 #Compute the goodness metric
 g_score = np.sqrt(np.mean((xHI_infer-xHI_mean)**2+(logfX_infer-logfX)**2))
 print('G-Score=%.6f' % g_score)
-r2score_xHI = r2_score(all_results[:,:1], all_results[:,2:3])
-r2score_fX = r2_score(all_results[:,1:2], all_results[:,3:4])
-r2score = 0.5*(r2score_xHI+r2score_fX)
-print('r2_score=%.6f | %.6f | %.6f' % (r2score_xHI,r2score_fX,r2score))
-g_all_score = pltr.rmse_all(all_results[:,:2], all_results[:,2:4])
-print('G-all Score=%.6f' % g_all_score)
-sigma_xHI = average_group_std(all_results[:,:1], all_results[:,2:3])
-sigma_fX = average_group_std(all_results[:,1:2], all_results[:,3:4])
-sigma = 0.5*(sigma_xHI+sigma_fX)
-print('sigma=%.6f | %.6f | %.6f' % (sigma_xHI,sigma_fX,sigma))
-sigma = average_combined_std(all_results)
-print('sigma=%.6f' % (sigma))
 #Make the plot look nice
 ax0.set_xticks(np.arange(0.,1.1,0.2))
 ax0.set_yticks(np.arange(-4.,0.1,1.))
@@ -189,21 +186,27 @@ if args.title is None:
     title = r'%s %d hr, $z=6$' % (telescope,tint)
 else:
     title = args.title
-plt.title(title, fontsize=fsize)#Make the plot look nice
+plt.title(title, fontsize=fsize)
+#Make the plot look nice
         
-ax0.set_xticks(np.arange(0.,1.1,0.2))
+ax0.set_xticks(np.arange(0.,0.9,0.2))
 ax0.set_yticks(np.arange(-4.,0.1,1.))
 ax0.set_xlim(0.,1.)
 ax0.set_ylim(-4,0.8)
 ax0.xaxis.set_minor_locator(AutoMinorLocator())
 ax0.yaxis.set_minor_locator(AutoMinorLocator())
 ax0.tick_params(axis='x',which='major',direction='in',bottom=True,top=True,left=True,right=True
-        ,length=10,width=1,labelsize=fsize, pad=9)
+        ,length=10,width=1,labelsize=fsize)
 ax0.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=True,right=True
         ,length=10,width=1,labelsize=fsize)
 ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
         ,length=5,width=1)
-      
+
+for tick in ax0.xaxis.get_majorticklabels():
+    tick.set_horizontalalignment("left")
+for tick in ax0.yaxis.get_majorticklabels():
+    tick.set_verticalalignment("bottom")
+
 plt.tight_layout()
 plt.savefig('%s/posterior_%s.%s' % ("./tmp_out", title,args.format), format=args.format)
 

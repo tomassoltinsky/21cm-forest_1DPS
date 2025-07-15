@@ -97,12 +97,12 @@ Nsteps = 10000
 #Start plotting
 fsize = 22
 #fsize_meas = 9
-colours  = ['royalblue','fuchsia','forestgreen','darkorange','red','lightcoral','slateblue','limegreen','teal','navy']
-colours = ['#1A9892', '#44328E', '#9E0142', '#216633', '#08306B']
-sec_colours = ['#8ED8D5', '#B7B0D9', '#ED9EC9', '#A2DA8A', '#6BAED6']
+colours  = ['royalblue','fuchsia','darkorange','forestgreen','red','lightcoral','slateblue','limegreen','teal','navy']
+#colours = ['#1A9892', '#44328E', '#9E0142', '#216633', '#08306B']
+#sec_colours = ['#8ED8D5', '#B7B0D9', '#ED9EC9', '#A2DA8A', '#6BAED6']
 
-colours = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
-sec_colours = ['#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5']
+#colours = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+#sec_colours = ['#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5']
 
 #base.initplt()
 plt.rcParams['figure.figsize'] = [5., 5.]
@@ -124,8 +124,8 @@ NstepsMC = 100000
 Nkbins = 6
 d_log_k_bins = 0.25
 
-xHI_mean = [0.11,0.80,0.52,0.11,0.80]
-logfX    = [-1.0,-1.0,-2.0,-3.0,-3.0]
+xHI_mean = [0.11,0.80,0.11,0.52,0.80]
+logfX    = [-1.0,-1.0,-3.0,-2.0,-3.0]
 
 def compute_pvalue_for_group(predictions, true_value):
     """
@@ -167,7 +167,7 @@ for i in range(5):
                 #print(f'loading {filename}')
                 data = np.load(filename)
                 pltr.hist2d(data[autocorr_cut:,0],data[autocorr_cut:,1],ax=ax0, smooth=True, levels=[1-np.exp(-0.5),1-np.exp(-2.)],
-                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k], sec_colour=sec_colours[k],
+                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k], sec_colour=None,
                             contour_kwargs={'zorder': 1, 'linewidths': 1.})#,contourf_kwargs=contkwarg)
 
                 logfX_infer[k] = data[0,1]
@@ -209,13 +209,16 @@ for i in range(5):
             #print(f"loading result file: {file}")
             all_results = np.loadtxt(file, delimiter=",", skiprows=1)
 
-            xHI_mean = np.reshape(all_results[:,2],(-1,Nsteps))[:,0]
-            logfX    = np.reshape(all_results[:,3],(-1,Nsteps))[:,0]
+            #xHI_mean = np.reshape(all_results[:,2],(-1,Nsteps))[:,0]
+            #logfX    = np.reshape(all_results[:,3],(-1,Nsteps))[:,0]
             #print(xHI_mean)
             #print(logfX)
 
             xHI_mean_post = np.reshape(all_results[:,0],(-1,Nsteps))
+            # Matching the changed order of test points, as defined in xHI_mean and logfX arrays
+            xHI_mean_post = np.vstack((xHI_mean_post[0], xHI_mean_post[1], xHI_mean_post[3], xHI_mean_post[2],xHI_mean_post[4]))
             logfX_post = np.reshape(all_results[:,1],(-1,Nsteps))
+            logfX_post = np.vstack((logfX_post[0], logfX_post[1], logfX_post[3], logfX_post[2],logfX_post[4]))
 
             print(xHI_mean_post)
             print(logfX_post)
@@ -226,7 +229,7 @@ for i in range(5):
             for k in range(len(logfX)):
                 #Plot the posterior distributions using corner package (Foreman-Mackey 2016, The Journal of Open Source Software, 1, 24)
                 pltr.hist2d(xHI_mean_post[k],logfX_post[k],ax=ax0, smooth=True,levels=[1-np.exp(-0.5),1-np.exp(-2.)],
-                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k], sec_colour=sec_colours[k],
+                            plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[k], sec_colour=None,
                             contour_kwargs={'zorder': 1, 'linewidths': 1.} )#,contourf_kwargs=contkwarg)
 
                 #Read the best fit values (median)
@@ -266,20 +269,18 @@ for i in range(5):
         ax0.yaxis.set_minor_locator(AutoMinorLocator())
 
         ax0.tick_params(axis='x',which='major',direction='in',bottom=True,top=True,left=True,right=True
-                ,length=10,width=1,labelsize=fsize)
+                ,length=10,width=1,labelsize=fsize, pad=9)
         ax0.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=True,right=True
                 ,length=10,width=1,labelsize=fsize)
         ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
                 ,length=5,width=1)
-
+        if len(ax0.xaxis.get_majorticklabels()) > 0:
+            ax0.xaxis.get_majorticklabels()[0].set_horizontalalignment("left")
+        if len(ax0.yaxis.get_majorticklabels()) > 0:
+            ax0.yaxis.get_majorticklabels()[0].set_verticalalignment("bottom")
         #set title
         title = ''
         score_str = rf'$G={g_score:.2f}, f={f_score:.2f}, x={x_score:.2f}$'
-            
-        for tick in ax0.xaxis.get_majorticklabels():
-            tick.set_horizontalalignment("left")
-        for tick in ax0.yaxis.get_majorticklabels():
-            tick.set_verticalalignment("bottom")
         
         """
         ax0.text(
@@ -313,6 +314,8 @@ axes[4,2].set_ylabel('Method B3', fontsize=fsize, fontweight='bold', labelpad=30
 axes[0,0].set_title(r'uGMRT$\,50\mathrm{hr}$', fontsize=fsize)
 axes[0,1].set_title(r'uGMRT$\,500\mathrm{hr}$', fontsize=fsize)
 axes[0,2].set_title(r'SKA1-low$\,50\mathrm{hr}$', fontsize=fsize)
+
+#axes[4,2].set_xticks(np.arange(0.,1.1,0.2))
 
 #axes[2].legend(title=r'$z=6$, '+ legendstr, title_fontsize=fsize, frameon=False, loc=(0.43, 0.58))
 #plt.suptitle(r'$z=6$', fontsize=fsize+2, y=1.0001)
