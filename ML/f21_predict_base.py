@@ -419,7 +419,7 @@ def setup_logging(output_dir):
 
 def setup_args_parser():
     parser = argparse.ArgumentParser(description='Predict reionization parameters from 21cm forest')
-    parser.add_argument('-p', '--path', type=str, default='../data/21cmFAST_los/F21_noisy/', help='filepath')
+    parser.add_argument('-p', '--path', type=str, default='../../../21cm-forest/data/21cmFAST_los/F21_noisy/', help='filepath')
     parser.add_argument('-z', '--redshift', type=float, default=6, help='redshift')
     parser.add_argument('-d', '--dvH', type=float, default=0.0, help='rebinning width in km/s')
     parser.add_argument('-r', '--spec_res', type=int, default=8, help='spectral resolution of telescope (i.e. frequency channel width) in kHz')

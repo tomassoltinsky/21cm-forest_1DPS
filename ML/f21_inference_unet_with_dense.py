@@ -173,7 +173,7 @@ for imp_type in ['weight','gain', 'cover', 'total_gain', 'total_cover']:
     logger.info(f"Importance type {imp_type}: {regressor.get_booster().get_score(importance_type=imp_type)}")
 
 # Predict parameters for the test dataset
-r2 = test_multiple(test_files, regression_model=regressor, latent_model=model, input_points_to_use=args.input_points_to_use, size=args.test_sample_size)
+r2 = test_multiple(test_files, regression_model=regressor, latent_model=model, input_points_to_use=args.input_points_to_use, size=args.test_sample_size, reps=args.test_reps)
 
 # Calculate R2 score
 logger.info(f"R2 Score for 10k inference: {r2}")

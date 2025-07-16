@@ -1,6 +1,6 @@
 '''
 Use Powerspectrum data to infer cosmological parameters.
-We use the powerspectrum computed on noisy data simulation.
+We use the powerspectrum computed on noisy data simulation or denoised flux.
 XGBoostRegressor is trained based on labelled data of 529 parameter combinations. 
 The same is then tested on 5 parameter combinations specially selected as test points.
 '''
@@ -43,6 +43,17 @@ def load_training_data(override_path, samples, args):
     for i, file in enumerate(files):
         curr_xHI = float(file.split('xHI')[1].split('_')[0])
         curr_logfX = float(file.split('fX')[1].split('_')[0])
+
+        ##
+        ## Override the xHI and logfX with the accurate values from the simulation data file
+        ##
+        #print(f'curr_xHI={curr_xHI}, curr_logfx={curr_logfX}')
+        #data = np.fromfile('%sF21_signalonly_21cmFAST_200Mpc_z6.0_fX%.2f_xHI%.2f_8kHz.dat' % (args.path,curr_logfX,curr_xHI),dtype=np.float32)
+        #print(f'###data:{data[:20]}')
+        #curr_xHI = data[1]
+        #curr_logfX = data[2]
+        #print(f'curr_xHI={curr_xHI}, curr_logfx={curr_logfX}')
+
         y_train[i*numgroups:(i+1)*numgroups, 0] = curr_xHI
         y_train[i*numgroups:(i+1)*numgroups, 1] = curr_logfX
         currps = np.loadtxt(file)[:samples,:16]
@@ -63,6 +74,17 @@ def load_test_data(override_path, samples, args):
     for i, file in enumerate(files):
         curr_xHI = float(file.split('xHI')[1].split('_')[0])
         curr_logfX = float(file.split('fX')[1].split('_')[0])
+
+        ##
+        ## Override the xHI and logfX with the accurate values from the simulation data file
+        ##
+        #print(f'curr_xHI={curr_xHI}, curr_logfx={curr_logfX}')
+        #data = np.fromfile('%sF21_signalonly_21cmFAST_200Mpc_z6.0_fX%.2f_xHI%.2f_8kHz.dat' % (args.path,curr_logfX,curr_xHI),dtype=np.float32)
+        #print(f'###data:{data[:20]}')
+        #curr_xHI = data[1]
+        #curr_logfX = data[2]
+        #print(f'curr_xHI={curr_xHI}, curr_logfx={curr_logfX}')
+        
         y_test[i*10000:(i+1)*10000, 0] = curr_xHI
         y_test[i*10000:(i+1)*10000, 1] = curr_logfX
         currps = np.loadtxt(file)[samples:,:16]
@@ -86,27 +108,27 @@ def main():
     torch.backends.cudnn.benchmark=False
 
     parser = base.setup_args_parser()
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/noisy_500/f21_ps_dum_train_test_uGMRT_t500.0_20250511105815/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/noisy_500/f21_ps_dum_train_test_uGMRT_t500.0_20250511105815/test_ps/", help='')
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/noisy_g50/f21_ps_dum_train_test_uGMRT_t50.0_20250410153928/ps/", help='model file')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/noisy_g50/f21_ps_dum_train_test_uGMRT_t50.0_20250410153928/test_ps/", help='model file')
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/noisy_ska/f21_ps_dum_train_test_SKA1-low_t50.0_20250511105922/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/noisy_ska/f21_ps_dum_train_test_SKA1-low_t50.0_20250511105922/test_ps/", help='')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/noisy_500/f21_ps_dum_train_test_uGMRT_t500.0_20250511105815/ps/", help='')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/noisy_500/f21_ps_dum_train_test_uGMRT_t500.0_20250511105815/test_ps/", help='')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/noisy_g50/f21_ps_dum_train_test_uGMRT_t50.0_20250410153928/ps/", help='model file')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/noisy_g50/f21_ps_dum_train_test_uGMRT_t50.0_20250410153928/test_ps/", help='model file')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/noisy_ska/f21_ps_dum_train_test_SKA1-low_t50.0_20250511105922/ps/", help='')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/noisy_ska/f21_ps_dum_train_test_SKA1-low_t50.0_20250511105922/test_ps/", help='')
 
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/denoised_500/f21_unet_ps_dum_train_test_uGMRT_t500.0_20250511164401/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/denoised_500/f21_unet_ps_dum_train_test_uGMRT_t500.0_20250511164401/test_ps/", help='')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_500/f21_unet_ps_dum_train_test_uGMRT_t500.0_20250511164401/ps/", help='')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_500/f21_unet_ps_dum_train_test_uGMRT_t500.0_20250511164401/test_ps/", help='')
 
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/denoised_500/mixed_f21_unet_ps_dum_train_test_uGMRT_t500.0_20250604091744/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/denoised_500/mixed_f21_unet_ps_dum_train_test_uGMRT_t500.0_20250604091744/test_ps/", help='')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_500/mixed_f21_unet_ps_dum_train_test_uGMRT_t500.0_20250604091744/ps/", help='')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_500/mixed_f21_unet_ps_dum_train_test_uGMRT_t500.0_20250604091744/test_ps/", help='')
 
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/denoised_50/mixed_f21_unet_ps_dum_train_test_uGMRT_t50.0_20250607223018/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/denoised_50/mixed_f21_unet_ps_dum_train_test_uGMRT_t50.0_20250607223018/test_ps/", help='')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_50/mixed_f21_unet_ps_dum_train_test_uGMRT_t50.0_20250607223018/ps/", help='')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_50/mixed_f21_unet_ps_dum_train_test_uGMRT_t50.0_20250607223018/test_ps/", help='')
 
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/denoised_ska/f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250511164401/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/denoised_ska/f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250511164401/test_ps/", help='')
+    parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_ska/f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250511164401/ps/", help='')
+    parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_ska/f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250511164401/test_ps/", help='')
 
-    #parser.add_argument('--datapath', type=str, default="saved_output/train_test_psbs_dump/denoised_ska/mixed_f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250608062755/ps/", help='')
-    #parser.add_argument('--testdatapath', type=str, default="saved_output/train_test_psbs_dump/denoised_ska/mixed_f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250608062755/test_ps/", help='')
+    #parser.add_argument('--datapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_ska/mixed_f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250608062755/ps/", help='')
+    #parser.add_argument('--testdatapath', type=str, default="../../../21cm-forest/code/saved_output/train_test_psbs_dump/denoised_ska/mixed_f21_unet_ps_dum_train_test_SKA1-low_t50.0_20250608062755/test_ps/", help='')
 
     #../data/denoised_gmrt50h/f21_unet_ps_dum_train_test_uGMRT_t50.0_20250417191012/denoised_ps
     

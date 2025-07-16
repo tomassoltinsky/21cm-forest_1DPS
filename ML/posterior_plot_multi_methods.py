@@ -104,6 +104,8 @@ parser.add_argument('-p', '--filepath', type=str, default='unet', help='filepath
 parser.add_argument('-d', '--datapath', type=str, default='unet', help='directory path for the IGM data')
 parser.add_argument('-t', '--telescope', type=str, default='uGMRT', help='telescope')
 parser.add_argument('-i', '--t_int', type=float, default=500, help='integration time of obsevation in hours')
+parser.add_argument('-n', '--num_methods', type=int, default=500, help='Stop after n methods')
+parser.add_argument('--format', type=str, default='pdf', help='output image format')
 args = parser.parse_args()
 
 #Set parameters describing data
@@ -133,10 +135,17 @@ method_labels = ['Method A1', 'Method A2', 'Method B1', 'Method B2', 'Method B3'
 fsize = 20
 fsize_meas = 16
 fsize_legend = 14
+colours  = ['royalblue','fuchsia','forestgreen','darkorange','red','lightcoral','slateblue','limegreen','teal','navy']
+
 #colours  = ['royalblue','fuchsia','forestgreen','darkorange','limegreen','slateblue','lightcoral','red','teal','navy']
 #colours  = ['royalblue','mediumseagreen','darkorange','mediumturquoise','orchid', 'burlywood','forestgreen','teal','slateblue','limegreen','lightcoral','fuchsia','red','navy']
-colours  = ['#A7D9F0','#B3E0B3','#FFDAB9','#B3E0D9','#D9B3E0']
-colours  = ['royalblue','mediumseagreen','darkorange','mediumturquoise','orchid'] 
+#colours  = ['#A7D9F0','#B3E0B3','#FFDAB9','#B3E0D9','#D9B3E0']
+#colours  = ['royalblue','mediumseagreen','darkorange','mediumturquoise','orchid'] 
+#colours = ['#1A9892', '#44328E', '#9E0142', '#216633', '#08306B']
+#sec_colours = ['#8ED8D5', '#B7B0D9', '#ED9EC9', '#A2DA8A', '#6BAED6']
+#colours = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+#sec_colours = ['#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5']
+
 #plt.style.use('seaborn-v0_8-pastel')
 fig = plt.figure(figsize=(8.,8.))
 gs = gridspec.GridSpec(1,1)
@@ -164,6 +173,7 @@ ax0.text(0.02, -1.15,r'Limit from Ly$\alpha$ data',color='darkgrey',fontsize=fsi
 
 legends = []
 for i, method in enumerate(methods):
+   if i + 1 > args.num_methods: break
    if method_types[i] == 'xgb':
       results_file = glob.glob(f"{args.filepath}/{method}*/test_results.csv")
       print(f"loading result file using pattern {results_file}")
@@ -208,7 +218,7 @@ for i, method in enumerate(methods):
    if i == 0: zorder = 2
    hist2d(xHI_mean_post, logfX_post, levels=[1-np.exp(-2.)], smooth=True, plot_datapoints=False, 
                  plot_density=False, plot_contours=True, fill_contours=True, color=colours[i], lighten_fill=True,
-                   contourf_kwargs={'zorder': zorder}, contour_kwargs={'zorder': zorder} )
+                   contourf_kwargs={'zorder': zorder}, sec_colour=None, contour_kwargs={'zorder': zorder} )
    #plt.contour(xedges[:-1], yedges[:-1], H.T, ax=ax0, levels=2, colors=colours[i]) # You can change levels and colors
 
    #,contourf_kwargs=contkwarg)
@@ -241,20 +251,9 @@ for i, method in enumerate(methods):
    #marker_elem = ax0.scatter(xHI_infer, logfX_infer, marker='o', s=200, linewidths=1., color=colours[i], edgecolors='black', alpha=1, label=f'{method_labels[i]}, G={g_score:.2f}', zorder=10)
    #marker_elem.set_visible(False)
    
-   # Create an invisible circle marker for legend only
-   circle_legend = Line2D(
-      [], [],                      # empty data, so nothing plotted
-      marker='o',  
-      color=colours[i],                # circle marker
-      #edgecolor='black',              
-      linestyle='None',            # no line
-      markersize=20,                # size of marker
-      label=f'{method_labels[i]}, G={g_score:.2f}'
-   )
-
-
+   # Create an invisible rectangle marker for legend only
    rectangle = Rectangle((0, 0), 20, 18,
-                              linewidth=1,  facecolor=colours[i], label=f'{method_labels[i]}, G={g_score:.2f}')
+                              linewidth=1,  facecolor=colours[i], edgecolor=colours[i], label=f'{method_labels[i]}')#, G={g_score:.2f}')
    legends.append(rectangle)
    print('Mock xHI and fX values')
    print(xHI_mean)
@@ -392,6 +391,6 @@ ax0.plot(xHI_lim_68,logfX_lim_68,linestyle='-',color='black',linewidth=1.5)
 plt.title(r'%s %d hr' % (telescope,tint), fontsize=fsize)
 plt.legend(handles=legends, labelspacing = 1, loc='lower right', fontsize=fsize_legend, frameon=False, title=r'$z=6$', title_fontsize=fsize)
 plt.tight_layout()
-plt.savefig('%s/multimethod_infer_unet_%s_%dhr_%dsteps.pdf' % ("./tmp_out", telescope,tint,Nsteps), format='pdf')
+plt.savefig('%s/multimethod_infer_unet_%s_%dhr_%dsteps.%s' % ("./tmp_out", telescope,tint,Nsteps,args.format), format=args.format)
 
 plt.show()

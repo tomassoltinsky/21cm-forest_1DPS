@@ -225,6 +225,7 @@ def plot_power_spectra(ps_set, ks, title, labels, xscale='log', yscale='log', sh
 
     base.initplt()
     plt.title(f'{title}')
+    plt.figure(figsize=(5.,2.5))
     if len(ps_set.shape) > 1:
         for i, ps in enumerate(ps_set):
 
@@ -240,7 +241,32 @@ def plot_power_spectra(ps_set, ks, title, labels, xscale='log', yscale='log', sh
                 if len(ks.shape) > 1: row_ks = ks[0]
                 else: row_ks = ks
         plt.plot(ks*1e6, ps, label=label, marker='o')
-        #plt.scatter(ks[1:]*1e6, ps[1:], label=label)
+    #plt.scatter(ks[1:]*1e6, ps[1:], label=label)
+        # Enable minor ticks
+    plt.minorticks_on()
+    # Customize major ticks
+    plt.tick_params(
+                which='major',
+                direction='in',
+                length=10,
+                width=1,
+                #labelsize=12,
+                top=True,
+                bottom=True,
+                left=True,
+                right=True
+            )
+    # Customize minor ticks
+    plt.tick_params(
+                which='minor',
+                direction='in',
+                length=5,
+                width=1,
+                top=True,
+                bottom=True,
+                left=True,
+                right=True
+            )
     plt.xscale(xscale)
     plt.yscale(yscale)
     plt.xlabel(r'k (Hz$^{-1}$)')
@@ -262,26 +288,57 @@ def plot_denoised_ps(los_test, y_test_so, y_pred_so, samples=1, showplots=False,
     ks_pred, ps_pred = PS1D.get_P_set(y_pred_so, signal_bandwidth, scaled=True)
     ks_pred, ps_pred = f21stats.logbin_power_spectrum_by_k(ks_pred, ps_pred)
     ps_pred_mean = np.mean(ps_pred, axis=0)
-
+    print(f'{ps_so_mean.shape}')
     plot_power_spectra(np.vstack((ps_so_mean,ps_noisy_mean,ps_pred_mean)), ks_noisy[0,:], title=label, labels=["signal-only", "noisy-signal", "reconstructed"], output_dir=output_dir)
 
-def plot_denoised_los(los_test, y_test_so, y_pred_so, samples=1, showplots=False, saveplots=True, label='', output_dir='tmp_out', freq_axis=None):
-    
+def plot_denoised_los(los_test, y_test_so, y_pred_so, samples=1, showplots=False, saveplots=True, output_dir='tmp_out', x=None, f=None,freq_axis=None):
+    label=rf'$\langle xHI\rangle$={x:.2f}, log$(f_X)$={f:.1f}'
     for i, (noisy, test, pred) in enumerate(zip(los_test[:samples], y_test_so[:samples], y_pred_so[:samples])):
         if freq_axis is None: freq_axis=range(len(noisy))
-        base.initplt()
+        plt.rcParams['axes.titlesize'] = 14
+        plt.rcParams['axes.labelsize'] = 14
+        plt.rcParams['xtick.labelsize'] = 14
+        plt.rcParams['ytick.labelsize'] = 14
+        plt.rcParams['legend.fontsize'] = 14
+        plt.figure(figsize=(5.,2.5))
         plt.title(f'{label}')
         chisq_noisy = np.sum((noisy - test)**2 / test)
         plt.plot(freq_axis, noisy, label=f'Signal+Noise: χ²={chisq_noisy:.2f}', c='black', linewidth=0.5)
         plt.plot(freq_axis, test, label='Signal', c='orange')
         chisq_denoised = np.sum((pred - test)**2 / test)
-        plt.plot(freq_axis, pred+0.1, label=f'Denoised+0.1: χ²={chisq_denoised:.2f}')
+        plt.plot(freq_axis, pred+0.03-0.02*f, label=f'Denoised+{0.03-0.02*f}: χ²={chisq_denoised:.2f}')
+
+        # Enable minor ticks
+        plt.minorticks_on()
+        # Customize major ticks
+        plt.tick_params(
+                    which='major',
+                    direction='in',
+                    length=6,
+                    width=1,
+                    #labelsize=12,
+                    top=True,
+                    bottom=True,
+                    left=True,
+                    right=True
+                )
+        # Customize minor ticks
+        plt.tick_params(
+                    which='minor',
+                    direction='in',
+                    length=3,
+                    width=1,
+                    top=True,
+                    bottom=True,
+                    left=True,
+                    right=True
+                )
         plt.xlabel(r'$\nu_{obs}$[MHz]'), 
         plt.ylabel(r'$F_{21}=e^{-\tau_{21}}$')
         #plt.legend(loc='best')#lower right')
         if saveplots: 
-            plt.savefig(f"{output_dir}/reconstructed_los_{label}.pdf", format="pdf", bbox_inches='tight')
-            logger.info(f"Saved denoised los plot to {output_dir}/reconstructed_los_{label}.png")
+            plt.savefig(f"{output_dir}/denoised_flux_{x:.2f}_{f:.1f}.pdf", format="pdf", bbox_inches='tight')
+            print(f"Saved denoised los plot to {output_dir}/denoised_flux_{x:.2f}_{f:.1f}.pdf")
         if i> 5: break
         if showplots: plt.show()
         print(f'denoising {label}: χ²={chisq_noisy:.2f} χ²={chisq_denoised:.2f}')
@@ -361,7 +418,8 @@ def lighten_color(rgba_color, amount=0.15):
 def hist2d(x, y, bins=20, range=None, weights=None, levels=None, smooth=None,
            ax=None, color=None, plot_datapoints=True, plot_density=True,
            plot_contours=True, no_fill_contours=False, fill_contours=False,
-           contour_kwargs=None, contourf_kwargs=None, data_kwargs=None, lighten_fill=False,
+           contour_kwargs=None, contourf_kwargs=None, data_kwargs=None, 
+           lighten_fill=False, sec_colour=None,
            **kwargs):
     """
     Plot a 2-D histogram of samples.
@@ -439,12 +497,16 @@ def hist2d(x, y, bins=20, range=None, weights=None, levels=None, smooth=None,
     # This "color map" is the list of colors for the contour levels if the
     # contours are filled.
     rgba_color = colorConverter.to_rgba(color)
+    contour_cmap = [list(rgba_color) for l in levels] + [list(rgba_color)]
     if lighten_fill:
         rgba_color = lighten_color(rgba_color, 0.1)
-    contour_cmap = [list(rgba_color) for l in levels] + [list(rgba_color)]
+        contour_cmap = [list(rgba_color) for l in levels] + [list(rgba_color)]
+    if sec_colour is not None:
+        rgba_sec_color =  colorConverter.to_rgba(sec_colour)
+        contour_cmap = [list(rgba_sec_color) for l in levels] + [list(rgba_sec_color)]
     for i, l in enumerate(levels):
         contour_cmap[i][-1] *= float(i) / (len(levels)+1)
-        print(f'contour_cmap[{i}][-1]= {contour_cmap[i][-1]}')
+        #print(f'contour_cmap[{i}][-1]= {contour_cmap[i][-1]}')
 
     # We'll make the 2D histogram to directly estimate the density.
     try:
