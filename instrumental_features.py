@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 '''
 Functions to incorporate instrumental features
-=======
-'''Functions to incorporate instrumental features
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
 
 Version 18.10.2023
 
@@ -11,20 +7,8 @@ Spectrum smoothed by running boxcar and fixed boxcar
 Gaussian white noise including Aeff/Tsys dependence on freq and intrinsic power-law radio spectrum
 '''
 
-<<<<<<< HEAD
 import numpy as np
 from astropy.convolution import convolve, Box1DKernel
-=======
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import scipy.signal as scisi
-from astropy.convolution import convolve, Box1DKernel
-from matplotlib.ticker import AutoMinorLocator
-from matplotlib import gridspec
-import matplotlib.patches as patches
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
 import openpyxl
 from numpy import random
 
@@ -33,7 +17,6 @@ import constants
 
 
 
-<<<<<<< HEAD
 def transF(optdep): #Change optical depth to transmitted flux
   return np.exp(-optdep)
 
@@ -44,25 +27,10 @@ def freq_obs(redshift,velH):  #Calculates observed frequency
   return constants.c/lambda_obs(redshift,velH)
 
 def z_obs(redshift,velH): #Calculates observed redshift
-=======
-fsize = 16
-
-def transF(optdep):
-  return np.exp(-optdep)
-
-def lambda_obs(redshift,velH):
-  return constants.lambda_0*(1+redshift)*(1-velH/constants.c)	#Calculates observed shifted wavelength
-
-def freq_obs(redshift,velH):
-  return constants.c/lambda_obs(redshift,velH)
-
-def z_obs(redshift,velH):
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   return lambda_obs(redshift,velH)/constants.lambda_0-1.
 
 
 
-<<<<<<< HEAD
 def smooth_fixedbox(frequency,signal,spec_res,shownpix=False):  #Smooth signal by fixed boxcar to model the spectral resolution of the telescope
   
   #frequency - array of frequency values
@@ -71,10 +39,6 @@ def smooth_fixedbox(frequency,signal,spec_res,shownpix=False):  #Smooth signal b
   #shownpix - if True, print the number of pixels over which the signal is convolved
 
   #Calculate the number of pixels over which the signal is convolved to achieve the spectral resolution of the telescope
-=======
-def smooth_fixedbox(frequency,signal,spec_res,shownpix=False):
-   
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   Nbins = len(frequency)
   v_pix = (frequency[-1]-frequency[0])/Nbins/1e3
   Npix = int(np.round(spec_res/v_pix,0))
@@ -85,17 +49,13 @@ def smooth_fixedbox(frequency,signal,spec_res,shownpix=False):
   Nbins = Nbins_smooth*Npix
   ind_smooth = np.arange(0,Nbins-1,Npix)+int(np.floor(Npix/2))
   freq_smooth = frequency[ind_smooth]
-<<<<<<< HEAD
   #Smooth the signal by taking mean within each bin of pixels. This reduces the number of bins by a factor of Npix
-=======
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   signal_smooth = np.empty(Nbins_smooth)
   for i in range(Nbins_smooth):
     signal_smooth[i] = np.mean(signal[i*Npix:(i+1)*Npix])
 
   return freq_smooth,signal_smooth
 
-<<<<<<< HEAD
 def smooth_runningbox(frequency,signal,spec_res): #Smooth signal by running boxcar to model the spectral resolution of the telescope
 
   #frequency - array of frequency values
@@ -103,10 +63,6 @@ def smooth_runningbox(frequency,signal,spec_res): #Smooth signal by running boxc
   #spec_res - spectral resolution of the telescope to be modelled
    
   #Calculate the number of pixels over which the signal is convolved to achieve the spectral resolution of the telescope
-=======
-def smooth_runningbox(frequency,signal,spec_res):
-   
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   Nbins = len(frequency)
   v_pix = (frequency[-1]-frequency[0])/Nbins/1e3
   Npix = int(np.round(spec_res/v_pix,0))
@@ -114,11 +70,8 @@ def smooth_runningbox(frequency,signal,spec_res):
 
   box_kernel = Box1DKernel(Npix)
   signal_smooth = convolve(signal, box_kernel,boundary='fill', fill_value=1.)
-<<<<<<< HEAD
 
   #Decrease the number of pixels by a factor of Npix by hand
-=======
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   ind_smooth = np.arange(0,Nbins+1,Npix)
   freq_smooth = frequency[ind_smooth]
   signal_smooth = signal_smooth[ind_smooth]
@@ -127,11 +80,7 @@ def smooth_runningbox(frequency,signal,spec_res):
 
 
 
-<<<<<<< HEAD
 def excel_column(data_name,n_col):  #Read data from excel file. Needed for Aeff/Tsys data
-=======
-def excel_column(data_name,n_col):
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
 
     wb = openpyxl.load_workbook(data_name)
     sheet = wb.active
@@ -144,7 +93,6 @@ def excel_column(data_name,n_col):
 
     return col
 
-<<<<<<< HEAD
 def add_noise(frequency,telescope,dv,S_source,spec_index,t_integration,N_dish,showsigN=False):  #Model telescope noise to be added to the signal
   
   #frequency - array of frequency values
@@ -157,11 +105,6 @@ def add_noise(frequency,telescope,dv,S_source,spec_index,t_integration,N_dish,sh
   #showsigN - if True, print the mean noise and standard deviation of the noise
 
   #read uGMRT or SKA1-low Aeff/Tsys from Fig. 8 in Braun et al. 2019
-=======
-def add_noise(frequency,telescope,dv,S_source,spec_index,t_integration,N_dish,showsigN=False):
-  
-  #read uGMRT Aeff/Tsys from Fig. 8 in Braun et al. 2019
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   datafile = 'sensitivity/sens_%s.xlsx' % telescope
   freq_0 = excel_column(datafile,1)*1000
   ATsys_0 = excel_column(datafile,2)
@@ -172,14 +115,9 @@ def add_noise(frequency,telescope,dv,S_source,spec_index,t_integration,N_dish,sh
   elif telescope=='SKA1-low':
     ATsys_0 = ATsys_0/np.sqrt(512*(512-1))
 
-<<<<<<< HEAD
   #Interpolate in the frequency range of Aeff/Tsys data
   frequency = frequency/1e6
   index_freq = np.digitize(frequency,freq_0,right=True)
-=======
-  frequency = frequency/1e6
-  index_freq = np.digitize(frequency,freq_0,right=True)	#Interpolate in the density (similar to redshift)
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
 
   freq_low  = freq_0[index_freq-1]
   freq_high = freq_0[index_freq]
@@ -212,15 +150,8 @@ def add_noise(frequency,telescope,dv,S_source,spec_index,t_integration,N_dish,sh
 
 
 
-<<<<<<< HEAD
 def uni_freq(freq,signal): #Calculate frequency range and, because we want to compute the power spectrum in frequency space, create a uniform frequency array.
   
-=======
-def uni_freq(freq,signal):
-
-  # Calculate frequency range and, because we want to compute the power spectrum 
-  # in frequency space, create a uniform frequency array.
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   minimum_frequency = np.min(freq)    
   maximum_frequency = np.max(freq)
   Delta_nu = maximum_frequency-minimum_frequency
@@ -238,16 +169,9 @@ def uni_freq(freq,signal):
 
 
 
-<<<<<<< HEAD
 def multi_obs(signal,N_obs,N_samples): #Create N_samples samples of median PS signal from N_obs randomly drawn LOS
  
   N_los,N_kbins = signal.shape  #get the number of LOS and number of k bins
-=======
-#Create N_samples samples of median PS signal from N_obs randomly drawn LOS
-def multi_obs(signal,N_obs,N_samples):
-   
-  N_los,N_kbins = signal.shape
->>>>>>> 8059d39cec5b600d8c2ba24fa6c96901f4c01ddd
   signal_multiobs = np.empty((N_samples,N_kbins))
 
   for i in range(N_samples):
