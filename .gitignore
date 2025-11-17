@@ -15,3 +15,4 @@ ML/saved_output/inference_ska50h/laten1_f21_inference_unet_with_dense_train_test
 ML/saved_output/inference_ska50h/latent_f21_inference_unet_with_dense_train_test_SKA1-low_t50.0_20250709145126/train_latent_features.csv
 /ML/output
 /ML/tmp_out
+datasets/
