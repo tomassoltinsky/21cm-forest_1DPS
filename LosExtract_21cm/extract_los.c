@@ -16,7 +16,7 @@ static double *exp_v2_b2;
 static double dx_inv;
 
 double ztime_file, fX_name, xHI_mean;
-int Nlos_name, ngrid;
+int Nlos_name;
 char *model;
 char *path;
 
@@ -45,10 +45,9 @@ int main(int argc, char **argv)
   //Parameters for file names
   ztime_file = 6.000;
   fX_name    = -2.;
-  Nlos_name  = 200;
+  Nlos_name  = 10;
   dvH        = 250;
   xHI_mean   = 0.25;
-  ngrid      = 256;
 
   if(SIGMA > fabs(XMIN))
     {
@@ -93,7 +92,6 @@ int main(int argc, char **argv)
       /*ztime_file += 1.;*/
       /*fX_name += 0.2;*/
       /*xHI_mean += 0.08;*/
-      /*ngrid *= 2;*/
       
     }
        
@@ -243,7 +241,7 @@ void read_los()
   FILE *input;
   
 
-  sprintf(fname, "%slos_regrid/los_50Mpc_%d_n%d_z%.3f_fX%.1f_xHI%.2f_dv%d_file%d.dat",path,ngrid,Nlos_name,ztime_file,fX_name,xHI_mean,dvH,filenum);
+  sprintf(fname, "%slos_regrid/los_50Mpc_n%d_z%.3f_fX%.1f_xHI%.2f_dv%d_file%d.dat",path,Nlos_name,ztime_file,fX_name,xHI_mean,dvH,filenum);
 
   if(!(input=fopen(fname,"rb")))
     {
@@ -303,7 +301,7 @@ void write_tau()
   char fname[400];
   FILE *output;
    
-  sprintf(fname, "%s/tau/tau_50Mpc_%d_n%d_z%.3f_fX%.1f_xHI%.2f_dv%d_file%d.dat",path,ngrid,nlos,ztime_file,fX_name,xHI_mean,dvH,filenum);
+  sprintf(fname, "%s/tau/tau_50Mpc_n%d_z%.3f_fX%.1f_xHI%.2f_dv%d_file%d.dat",path,nlos,ztime_file,fX_name,xHI_mean,dvH,filenum);
 
   if(!(output=fopen(fname,"wb")))
     {
