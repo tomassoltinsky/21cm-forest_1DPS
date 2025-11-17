@@ -25,7 +25,7 @@ If you are interested in more data from this work, please request it from me by 
 # Acknowledging
 
 If you use the 21-cm forest optical depth calculation code (i.e. LosExtract)  
-please cite Šoltinský et al. 2021, 
+please cite Šoltinský et al. 2021, MNRAS 506, 5818 - https://ui.adsabs.harvard.edu/abs/2021MNRAS.506.5818S/abstract
 
 If you use the systematics modelling (spectral resolution, thermal noise, etc.), 21-cm forest 1D power spectrum computation, and/or MCMC inference code  
 please cite Šoltinský et al. 2025, MNRAS, 537, 1, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
