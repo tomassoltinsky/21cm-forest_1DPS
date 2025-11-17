@@ -7,8 +7,6 @@ Used in:
 
 Patil et al. 2025, arXiv:2507.11611 - https://ui.adsabs.harvard.edu/abs/2025arXiv250711611P/abstract
 
-<br /> 
-
 # Codes include
 
 Computing 21-cm forest optical depth from simulated intergalactic medium fields
