@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
   //Parameters for file names
   ztime_file = 6.000;
-  fX_name    = -2.;
+  fX_name    = -3.;
   Nlos_name  = 10;
   dvH        = 250;
   xHI_mean   = 0.25;
