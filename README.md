@@ -29,3 +29,7 @@ please cite Šoltinský et al. 2021, MNRAS 506, 5818 - https://ui.adsabs.harvard
 
 If you use the systematics modelling (spectral resolution, thermal noise, etc.), 21-cm forest 1D power spectrum computation, and/or MCMC inference code  
 please cite Šoltinský et al. 2025, MNRAS, 537, 1, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
+
+If you use the AI/ML based architecture and analysis (U-net, XGBoost)  
+please cite Patil et al. 2025, arXiv:2507.11611 - https://ui.adsabs.harvard.edu/abs/2025arXiv250711611P/abstract
+
