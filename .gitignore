@@ -1,7 +1,8 @@
 datasets/21cmFAST_los/los_regrid/los_50Mpc_256*
 datasets/21cmFAST_los/tau/tau_50Mpc_256*
 .DS_Store
-/ML/__pycache__
+__pycache__/
+*.py[cod]
 ML/saved_output/inference_gmrt500h/archive/laten1_f21_inference_unet_with_dense_train_test_uGMRT_t500.0_20250508112308/train_latent_features.csv
 ML/saved_output/inference_gmrt500h/archive/latent_f21_inference_unet_with_dense_train_test_uGMRT_t500.0_20250414093815/train_latent_features.csv
 ML/saved_output/inference_gmrt500h/laten1_f21_inference_unet_with_dense_train_test_uGMRT_t500.0_20250710030439/train_latent_features.csv
