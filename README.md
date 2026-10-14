@@ -31,5 +31,5 @@ If you use the systematics modelling (spectral resolution, thermal noise, etc.),
 please cite Šoltinský et al. 2025, MNRAS, 537, 1, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
 
 If you use the AI/ML based architecture and analysis (U-net, XGBoost)  
-please cite Patil et al. 2025, arXiv:2507.11611 - https://ui.adsabs.harvard.edu/abs/2025arXiv250711611P/abstract
+please cite Patil et al. 2026, MNRAS, 546, 4, 18 - https://ui.adsabs.harvard.edu/abs/2026MNRAS.546ag236P/abstract
 
