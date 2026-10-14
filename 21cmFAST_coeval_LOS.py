@@ -1,3 +1,6 @@
+#Code to generate 1D LOS data of IGM fields from 21cmFAST coeval boxes. Version of 3.3.1 of 21cmFAST is used here.
+#The code generates a number of LOS uniformly distributed in the simulation box along all three axes.
+#The LOS data is saved in a single binary file for each IGM model.
 from ast import Del
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,6 +8,7 @@ import os
 #We change the default level of the logger so that we can see what's happening with caching.
 import logging, sys, os
 from matplotlib import gridspec
+import constants
 
 logger = logging.getLogger('21cmFAST')
 logger.setLevel(logging.INFO)
@@ -27,7 +31,7 @@ print('Time: %s' % now.strftime('%H:%M:%S'))
 ti_whole = time.time()
 
 #Set input parameters here
-Mpc = 3.086e19	#Megaparsec in km
+Mpc = constants.Mpc/1e5 #Megaparsec in km
 Lbox = 50           #Simulation box size in cMpc
 Nbins = 256         #Number of pixels in the simulation box on each side
 Nlos = 10           #Number of LOS to generate (uniformly distributed in the simulation box along all three axes)
@@ -199,7 +203,7 @@ for i in range(len(ioneff)):
     array = np.append(array,J21)
 
     array = array.astype('float32')
-    array.tofile('../datasets/21cmFAST_los/los/los_%dMpc_%d_n%d_z%.3f_fX%.1f_xHI%.2f.dat' % (Lbox,Nbins,Nlos,z,logfX[i],xHI_mean),sep='',format='float32')
+    array.tofile('datasets/21cmFAST_los/los/los_%dMpc_%d_n%d_z%.3f_fX%.1f_xHI%.2f.dat' % (Lbox,Nbins,Nlos,z,logfX[i],xHI_mean),sep='',format='float32')
 
     #Delete the cached data to save disk space. Note that these files are the most computationally expensive.
     p21c.cache_tools.clear_cache(kind=['IonizedBox','TsBox'])

@@ -44,10 +44,10 @@ int main(int argc, char **argv)
 
   //Parameters for file names
   ztime_file = 6.000;
-  fX_name    = -2.;
+  fX_name    = -3.;
   Nlos_name  = 10;
   dvH        = 250;
-  xHI_mean   = 0.25;
+  xHI_mean   = 0.11;
 
   if(SIGMA > fabs(XMIN))
     {
@@ -58,13 +58,13 @@ int main(int argc, char **argv)
   MakeLineProfileTable();
     
     //Loop over file parameters
-    for(j=0; j<1; j++)
+    for(j=0; j<2; j++)
     {
 
       filenum = 0;
       
       //Loop over parts of each file (split by LOS)
-      for(i=0; i<1; i++)
+      for(i=0; i<2; i++)
       {
         printf("\nReading los output at z=%.3f:, file%d:\n",ztime_file,filenum);
         read_los();
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
       /*ztime_file += 1.;*/
       /*fX_name += 0.2;*/
-      /*xHI_mean += 0.08;*/
+      xHI_mean += 0.69;
       
     }
        
