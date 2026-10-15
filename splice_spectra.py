@@ -23,7 +23,7 @@ nfiles = 2              #Number of files in the original data
 Nlos_new = Nlos*nfiles  #Number of lines-of-sight in the new data
 extension_factor = 4    #Factor by which the length of the new LOS will be extended. The new data will have Nbins*extension_factor pixels.
 
-#Find all of the datasets for the interpolation
+#Find all of the datasets
 files = glob.glob(path+'los/*.dat')
 files_to_remove = glob.glob(path+'los/*fXnone*.dat')  #Ignore the IGM models with no X-ray heating
 for i in range(len(files_to_remove)):

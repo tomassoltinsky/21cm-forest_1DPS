@@ -22,12 +22,18 @@ dvH = float(sys.argv[2])		  #rebinning width in km/s
 spec_res = float(sys.argv[3])	#spectral resolution of telescope (i.e. frequency channel width) in kHz
 n_los = int(sys.argv[4])      #number of lines-of-sight
 
-#Find all of the datasets for the interpolation
+#Find all of the datasets
 files = glob.glob(path+'los/*.dat')
-#Remove some if needed
-files_to_remove = glob.glob(path+'los/*fXnone*.dat')
+files_to_remove = glob.glob(path+'los/*fXnone*.dat')  #Ignore the IGM models with no X-ray heating
 for i in range(len(files_to_remove)):
    files.remove(files_to_remove[i])
+files_to_remove = glob.glob(path+'los/*seed*.dat')    #Ignore the IGM models with different random seeds
+for i in range(len(files_to_remove)):
+   files.remove(files_to_remove[i])
+
+#Or you can select which files to use manually
+files = ['datasets/21cmFAST_los/los/los_50Mpc_256_n1000_z6.000_fX-3.0_xHI0.80.dat'
+        ,'datasets/21cmFAST_los/los/los_50Mpc_256_n1000_z6.000_fX-3.0_xHI0.11.dat']
 
 logfX = np.empty(len(files))
 xHI_mean = np.empty(len(files))

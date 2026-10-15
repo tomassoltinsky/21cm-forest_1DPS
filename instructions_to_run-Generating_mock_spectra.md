@@ -1,4 +1,4 @@
-Here are the instructions to run various codes with recommended workflow.
+Here are the instructions to run various codes to generate mock flux spectra of the 21-cm forest with recommended workflow.
 
 <br>
 
@@ -46,7 +46,8 @@ python IGM_spectrum_LOSplot.py \<path\> \<z_name\> \<dvH\> \<fX_name\> \<xHI_mea
 \<filenum\> - file number of the LOS data<br>
 \<LOS\> - LOS number to be plotted<br>
 
-This code generates a plot of the IGM fields and 21-cm forest optical depth along a single LOS. The output is saved in plots/.
+This code generates a plot of the IGM fields and 21-cm forest optical depth along a single LOS. The output is saved in plots/.<br>
+For Fig. 1 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
 
 <br>
 
@@ -74,4 +75,34 @@ python spectrum_21cmFAST_noisy.py \<z_name\> \<dvH\> \<spec_res\> \<telescope\> 
 \<xHI_mean\> - mean neutral hydrogen fraction value<br>
 \<LOS\> - LOS number to be plotted<br>
 
-This code generates a plot of the 21-cm forest normalized flux spectrum along a single LOS with added thermal noise from the telescope. The output is saved in plots/.
+This code generates a plot of the 21-cm forest normalized flux spectrum along a single LOS with added thermal noise from the telescope. The output is saved in plots/.<br>
+For Fig. 4 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
+
+<br>
+
+*PDF_noisevssignal_flux_multiLOS.py*
+
+z_name = float(sys.argv[1])		#redshift
+dvH = float(sys.argv[2])		#rebinning width in km/s
+spec_res = float(sys.argv[3])	#spectral resolution of telescope (i.e. frequency channel width) in kHz
+telescope = str(sys.argv[4])	#telescope name duh
+Nd = int(sys.argv[5])			#number dishes used by telescope
+S_min_QSO = float(sys.argv[6])	#intrinsic flux of QSO at 147Hz in mJy
+alpha_R = float(sys.argv[7])	#radio spectral index of QSO
+t_int = float(sys.argv[8])		#integration time of observation in hours
+fX_name = float(sys.argv[9])	#log10(f_X)
+xHI_mean = float(sys.argv[10])	#mean neutral hydrogen fraction
+
+\<z_name\> - redshift of the LOS data<br>
+\<dvH\> - rebinning width in km/s<br>
+\<spec_res\> - spectral resolution of telescope (i.e. frequency channel width) in kHz<br>
+\<telescope\> - telescope name<br>
+\<Nd\> - number of dishes used by telescope<br>
+\<S_min_QSO\> - intrinsic flux of QSO at 147Hz in mJy<br>
+\<alpha_R\> - radio spectral index of QSO<br>
+\<t_int\> - integration time of observation in hours<br>
+\<fX_name\> - log10(f_X)<br>
+\<xHI_mean\> - mean neutral hydrogen fraction<br>
+
+This code generates a plot of the PDF of the 21-cm forest normalized flux spectrum along multiple LOS with added thermal noise from the telescope. The output is saved in plots/.<br>
+For Fig. 5 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
