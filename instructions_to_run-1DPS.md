@@ -1,6 +1,8 @@
 Here are the instructions to run various codes to generate mock 1D power spectra of the 21-cm forest with recommended workflow.<br>
 This assumes that the user has already generated the LOS data and computed the 21-cm forest optical depth using the instructions in instructions_to_run-Generating_mock_spectra.md.
 
+<br>
+
 *1DPS_data_signal_21cmFAST_multiparam.py*
 
 python 1DPS_data_signal_21cmFAST_multiparam.py \<z_name\> \<dvH\> \<spec_res\> \<n_los\>

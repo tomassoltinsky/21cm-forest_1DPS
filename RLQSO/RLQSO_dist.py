@@ -1,3 +1,5 @@
+#Code to plot distribution of z>5.5 radio-loud quasars (RLQSO): their flux density, redshift
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -5,6 +7,7 @@ from matplotlib import gridspec
 from matplotlib.ticker import AutoMinorLocator
 import openpyxl
 
+#Function to read the excel table 
 def excel_column(data_name,n_col):
 
     wb = openpyxl.load_workbook(data_name)
@@ -18,6 +21,7 @@ def excel_column(data_name,n_col):
 
     return col
 
+#Read the data from RLQSO table
 z = excel_column('radio_sources.xlsx',2)
 S147 = excel_column('radio_sources.xlsx',6)
 S147_limit = excel_column('radio_sources.xlsx',7)
@@ -34,7 +38,7 @@ fsize = 16
 fsize_leg = 14
 
 
-
+#Plot flux density vs redshift distribution
 fig = plt.figure(figsize=(5.,5.))
 gs = gridspec.GridSpec(1,1)
 
@@ -62,7 +66,7 @@ plt.show()
 plt.close()
 
 
-
+#Plot histogram of redshift and split by hemispheres
 Smin_crit = 1.
 
 ind_S147       = np.where(S147>=Smin_crit)[0]
@@ -105,7 +109,7 @@ plt.show()
 plt.close()
 
 
-
+#Plot histogram of redshift
 fig = plt.figure(figsize=(5.,10./1.2))
 gs = gridspec.GridSpec(2,1)
 
@@ -153,6 +157,7 @@ plt.close()
 
 
 
+#Plot histogram of flux density and split by hemispheres
 bins = np.arange(-2.5,70.,5)
 
 fig = plt.figure(figsize=(5.,5.))
