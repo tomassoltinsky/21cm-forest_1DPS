@@ -1,7 +1,7 @@
 """
-Parameter inference code based on Bayesian methods.
+Generates 2D interpolator in the xHI-logfX parameter space for 1D power spectrum of 21-cm forest null-detection limits.
 
-Uses 2D interpolator for 1D PS from 21-cm forest.
+A null-detection is defined if at least k-bin has a signal 1D PS below the noise 1D PS.
 
 Version 12.2.2024
 
@@ -30,10 +30,11 @@ start_clock = time.perf_counter()
 z_name = float(sys.argv[1])         #redshift
 dvH = float(sys.argv[2])            #used rebinning for line profile convolution in m/s
 spec_res = float(sys.argv[3])       #spectral resolution of the telescope in kHz
-path_LOS = '../../datasets/21cmFAST_los/los/'
+path_LOS = 'datasets/21cmFAST_los/los/'
 Nobs = int(sys.argv[4])
 Nkbins = int(sys.argv[5])
 
+#Observational configurations
 telescope = ['uGMRT','uGMRT','SKA1-low']
 tint = [50,500,50]
 S147 = 64.2
@@ -73,6 +74,7 @@ done_perc = 0.1
 print('Initiate interpolator setup')
 PS_sim_ens = np.empty((len(logfX),Nsamples,len(k_bins_cent)))
 
+#Setup 1D PS 21-cm forest signal only interpolator.
 #Find all of the parameter values in simulated data and read the data for interpolation
 for j in range(len(files)):
    
@@ -205,7 +207,7 @@ for i in range(len(telescope)):
   array = np.append(xHI_lim_68,logfX_lim_68)
   array = np.append(array,xHI_lim_95)
   array = np.append(array,logfX_lim_95)
-  array.astype('float32').tofile('datasets/interpolators/nulldetection2_limits_200Mpc_z%.1f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_Nobs%d_Nkbins%d.dat' % (z_name,telescope[i],spec_res,tint[i],S147,alphaR,Nobs,Nkbins),sep='')
+  array.astype('float32').tofile('datasets/interpolators/nulldetection_limits_200Mpc_z%.1f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_Nobs%d_Nkbins%d.dat' % (z_name,telescope[i],spec_res,tint[i],S147,alphaR,Nobs,Nkbins),sep='')
 
   stop_clock = time.perf_counter()
   time_taken = (stop_clock-start_clock)

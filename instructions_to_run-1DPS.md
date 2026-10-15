@@ -29,7 +29,7 @@ python 1DPS_data_noise.py \<z_name\> \<dvH\> \<spec_res\> \<telescope\> \<N_d\> 
 \<alpha_R\> - radio spectral index of QSO<br>
 \<t_int\> - integration time of observation in hours<br>
 
-This code generates the 1D power spectrum of the noise in the 21-cm forest flux spectrum. The output is saved in 1DPS_dimensionless/1DPS_noise/.
+This code generates the 1D power spectrum of the noise in the 21-cm forest flux spectrum. The output is saved in 1DPS_dimensionless/1DPS_noise/. The thermal noise is computed following Eq. 3 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
 
 <br>
 

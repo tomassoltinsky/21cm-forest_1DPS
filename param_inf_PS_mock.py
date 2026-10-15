@@ -193,7 +193,7 @@ ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,le
 
 plt.tight_layout()
 plt.subplots_adjust(hspace=2.0)
-plt.savefig('1DPS_plots/power_spectrum_mockandinf_200Mpc_z%.1f_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_%dkbins_mockPS.pdf' % (z_name,xHI_mean_mock,logfX_mock,telescope,spec_res,S147,alphaR,tint,Nkbins))
+plt.savefig('plots/power_spectrum_mockandinf_200Mpc_z%.1f_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_%dkbins_mockPS.pdf' % (z_name,xHI_mean_mock,logfX_mock,telescope,spec_res,S147,alphaR,tint,Nkbins))
 plt.close()
 
 
@@ -219,6 +219,6 @@ for ax in fig.get_axes():
       ax.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
             ,length=5.625,width=1.125)
 
-plt.savefig('1DPS_plots/power_spectrum_mockandinf_200Mpc_z%.1f_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_%dkbins_corner.pdf' % (z_name,xHI_mean_mock,logfX_mock,telescope,spec_res,S147,alphaR,tint,Nkbins))
+plt.savefig('plots/power_spectrum_mockandinf_200Mpc_z%.1f_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_%dkbins_corner.pdf' % (z_name,xHI_mean_mock,logfX_mock,telescope,spec_res,S147,alphaR,tint,Nkbins))
 plt.show()
 plt.close()

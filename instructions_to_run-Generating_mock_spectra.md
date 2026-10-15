@@ -75,8 +75,8 @@ python spectrum_21cmFAST_noisy.py \<z_name\> \<dvH\> \<spec_res\> \<telescope\> 
 \<xHI_mean\> - mean neutral hydrogen fraction value<br>
 \<LOS\> - LOS number to be plotted<br>
 
-This code generates a plot of the 21-cm forest normalized flux spectrum along a single LOS with added thermal noise from the telescope. The output is saved in plots/.<br>
-For Fig. 4 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
+This code generates a plot of the 21-cm forest normalized flux spectrum along a single LOS with added thermal noise from the telescope. The output is saved in plots/. The thermal noise is computed following Eq. 3 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract<br>
+For Fig. 4 in Šoltinský et al. 2025
 
 <br>
 

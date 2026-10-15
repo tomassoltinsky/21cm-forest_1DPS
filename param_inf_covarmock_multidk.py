@@ -58,7 +58,7 @@ files_to_remove = glob.glob(path_LOS+'*fXnone*.dat')
 for i in range(len(files_to_remove)):
    files.remove(files_to_remove[i])
 
-Nkbins_all = [6]
+Nkbins_all = [6]  #Number of k bins to be used for MCMC
 
 for Nkbins_i in range(len(Nkbins_all)):
 
@@ -107,7 +107,7 @@ for Nkbins_i in range(len(Nkbins_all)):
 
 
 
-  #Choose which combination of Mcovar and y to be used
+  #Choose which combination of Mcovar and mock to be used
   Mcovar = Mcovar_mock
   PS_mock_mean = signal_multiobs_mean_mock
 

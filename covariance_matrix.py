@@ -1,5 +1,5 @@
 """
-Covariance and correlation matrix computation for the 21-cm forest PS and likelihood according to Hennawi et al. 2021.
+Covariance and correlation matrix computation for the 21-cm forest PS and likelihood according to Hennawi et al. 2021, MNRAS , 506, 2963
 
 Version 6.5.2024
 
