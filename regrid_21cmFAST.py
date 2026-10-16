@@ -6,7 +6,7 @@ import matplotlib as mpl
 import constants
 
 Nlos_new = int(sys.argv[1]) #Number of LOS to be outputted in a single file. The total number of LOS in the original data is Nlos.
-dvH = float(sys.argv[2])    #Velocity resolution in km/s. This should be smaller than Doppler parameter b (in km/s) to properly convolve over the line profile in the next step.
+dvH = float(sys.argv[2])    #Velocity resolution in m/s. This should be smaller than Doppler parameter b (in m/s) to properly convolve over the line profile in the next step.
 z_name = float(sys.argv[3]) #Redshift
 
 Lbox = 50   #Size of the simulated box in cMpc
@@ -68,7 +68,7 @@ for j in range(len(xHI_mean_name)):
     print('Doppler parameter b = %.2fm/s' % b_doppler)
 
 
-    #Regrid the LOS data to a new velocity resolution dvH (in km/s)
+    #Regrid the LOS data to a new velocity resolution dvH (in m/s)
     a = 1./(1.+z)
     r_conv = a/1000./h
     omega_k = 1.-omega_0-omega_L

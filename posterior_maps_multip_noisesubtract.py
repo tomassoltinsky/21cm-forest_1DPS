@@ -5,6 +5,7 @@ for the noisy and noise-subtracted 1D PS of the 21-cm forest.
 Version 04.07.2025
 '''
 
+#Import necessary packages
 import sys
 import glob, os
 import numpy as np
@@ -14,6 +15,7 @@ from matplotlib.ticker import AutoMinorLocator
 from matplotlib import gridspec
 import corner
 
+#Set simulation and observational parameters
 z_name = 6.000
 spec_res = 8
 S147 = 64.2
@@ -24,11 +26,14 @@ autocorr_cut = 1000
 Nkbins = 6
 d_log_k_bins = 0.25
 
+#Input parameters
 telescope = sys.argv[1]
 tint = int(sys.argv[2])
+#Select mock IGM models
 xHI_mean = [0.11,0.80,0.52,0.11,0.80]
 logfX    = [-1.0,-1.0,-2.0,-3.0,-3.0]
 
+#Read the true parameter values of the mock IGM models from the LOS data
 xHI_true = np.empty(len(xHI_mean))
 logfX_true = np.empty(len(logfX))
 for i in range(len(logfX)):
@@ -37,6 +42,7 @@ for i in range(len(logfX)):
    logfX_true[i] = data[9]
    xHI_true[i] = data[11]
 
+#Plot posterior distributions for the noisy 1D power spectrum
 print('Telescope: %s, integration time: %d hr' % (telescope,tint))
 print('With noise')
 
@@ -53,6 +59,7 @@ xHI_infer = np.empty(len(logfX))
 std_xHI = np.empty(len(logfX))
 std_logfX = np.empty(len(logfX))
 
+#Read MCMC samples and plot posterior distributions
 for i in range(len(logfX)):
     data = np.load('MCMC_samples/flatsamp_200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps.npy' % (xHI_mean[i],logfX[i],telescope,spec_res,S147,alphaR,tint,d_log_k_bins,Nkbins,Nsteps))
     corner.hist2d(data[autocorr_cut:,0],data[autocorr_cut:,1],levels=[1-np.exp(-0.5),1-np.exp(-2.)],plot_datapoints=False,plot_density=False,fill_contours=True,color=colours[i])#,contourf_kwargs=contkwarg)
@@ -63,6 +70,7 @@ for i in range(len(logfX)):
     std_xHI[i] = np.std(data[autocorr_cut:,0])
     std_logfX[i] = np.std(data[autocorr_cut:,1])
 
+#Plot inferred and true parameter values
 for i in range(len(logfX)):
     ax0.scatter(xHI_infer[i],logfX_infer[i],marker='o',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
     ax0.scatter(xHI_true[i],logfX_true[i],marker='*',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
@@ -74,6 +82,7 @@ print('Inferred')
 print(xHI_infer)
 print(logfX_infer)
 
+#Calculate distance between inferred and true parameter values and mean posterior uncertainty
 G_5 = np.sqrt(np.mean((xHI_infer-xHI_true)**2+(logfX_infer-logfX_true)**2))
 print('G_5       = %.6f' % G_5)
 std_total = np.mean(np.sqrt(std_xHI**2+std_logfX**2))
@@ -96,29 +105,23 @@ ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,le
 
 
 
+#Plot observational limit from literature: McGreer et al. 2015, MNRAS , 447, 499; Ďurovčíková et al., 2024, ApJ , 969, 162; Gaikwad et al., 2023, MNRAS , 525, 4093; Greig et al., 2024, MNRAS , 530, 3208
 colours_lit = ['grey','brown','darkviolet','navy']
 rot = 60
-'''
-ax0.axvspan(0.21-0.07,0.21+0.17,alpha=0.2,color=colours_lit[0])
-ax0.text(0.15,-1.80,'Ďurovčíková+24',color=colours_lit[0],rotation=rot,fontsize=12)
 
-ax0.axvspan(0.17-0.11,0.17+0.09,alpha=0.2,color=colours_lit[1])
-ax0.text(0.08,-1.80,'Gaikwad+23',color=colours_lit[1],rotation=rot,fontsize=12)
-
-ax0.axvspan(0,0.21,alpha=0.2,color=colours_lit[2])
-ax0.text(0.005,-1.80,'Greig+24',color=colours_lit[2],rotation=rot,fontsize=12)
-'''
 ax0.axvspan(0.,0.21+0.17,alpha=0.2,color=colours_lit[0])
 ax0.text(0.025,-0.60,r'Limit from Ly$\alpha$ data',color=colours_lit[0],fontsize=9)
 
 plt.title(r'%s, %d hr, $G=%.2f$' % (telescope,tint,G_5), fontsize=fsize)
 
+#Save figure
 plt.tight_layout()
 plt.savefig('plots/multiparam_infer_%dNkbins_%s_%dhr_%dsteps.pdf' % (Nkbins,telescope,tint,Nsteps))
 plt.show()
 
 
 
+#Plot posterior distributions for the noise-subtracted 1D power spectrum
 print('Noise subtracted')
 
 Nsteps = 100000
@@ -133,6 +136,7 @@ xHI_infer = np.empty(len(logfX))
 std_xHI = np.empty(len(logfX))
 std_logfX = np.empty(len(logfX))
 
+#Read noise-subtracted MCMC samples and plot posterior distributions
 for i in range(len(logfX)):
 
     data = np.load('MCMC_samples/noise_sub/flatsamp_nsub_200Mpc_xHI%.2f_fX%.1f_%s_%dkHz_Smin%.1fmJy_alphaR%.2f_t%dh_dk%.2f_%dkbins_%dsteps.npy' % (xHI_mean[i],logfX[i],telescope,spec_res,S147,alphaR,tint,d_log_k_bins,Nkbins,Nsteps))
@@ -144,6 +148,7 @@ for i in range(len(logfX)):
     std_xHI[i] = np.std(data[autocorr_cut:,0])
     std_logfX[i] = np.std(data[autocorr_cut:,1])
 
+#Plot inferred and true parameter values
 for i in range(len(logfX)):
     ax0.scatter(xHI_infer[i],logfX_infer[i],marker='o',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
     ax0.scatter(xHI_true[i],logfX_true[i],marker='*',s=200,linewidths=1.,color=colours[i],edgecolors='black',alpha=1)
@@ -154,6 +159,7 @@ print(xHI_true)
 print('Inferred')
 print(xHI_infer)
 print(logfX_infer)
+#Calculate distance between inferred and true parameter values and mean posterior uncertainty
 G_5 = np.sqrt(np.mean((xHI_infer-xHI_true)**2+(logfX_infer-logfX_true)**2))
 print('G_5       = %.6f' % G_5)
 std_total = np.mean(np.sqrt(std_xHI**2+std_logfX**2))
@@ -173,21 +179,14 @@ ax0.tick_params(axis='y',which='major',direction='in',bottom=True,top=True,left=
 		,length=10,width=1,labelsize=fsize)
 ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,left=True,right=True
 		,length=5,width=1)
-'''
-ax0.axvspan(0.21-0.07,0.21+0.17,alpha=0.2,color=colours_lit[0])
-ax0.text(0.15,-1.80,'Ďurovčíková+24',color=colours_lit[0],rotation=rot,fontsize=12)
 
-ax0.axvspan(0.17-0.11,0.17+0.09,alpha=0.2,color=colours_lit[1])
-ax0.text(0.08,-1.80,'Gaikwad+23',color=colours_lit[1],rotation=rot,fontsize=12)
-
-ax0.axvspan(0,0.21,alpha=0.2,color=colours_lit[2])
-ax0.text(0.005,-1.80,'Greig+24',color=colours_lit[2],rotation=rot,fontsize=12)
-'''
+#Plot observational limit from literature
 ax0.axvspan(0.,0.21+0.17,alpha=0.2,color=colours_lit[0])
 ax0.text(0.025,-0.60,r'Limit from Ly$\alpha$ data',color=colours_lit[0],fontsize=9)
 
 plt.title(r'%s, %d hr, $G=%.2f$' % (telescope,tint,G_5), fontsize=fsize)
 
+#Save figure
 plt.tight_layout()
 plt.savefig('plots/multiparam_infer_%dNkbins_%s_%dhr_%dsteps_nsub.pdf' % (Nkbins,telescope,tint,Nsteps))
 plt.show()

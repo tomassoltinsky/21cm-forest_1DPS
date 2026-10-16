@@ -75,7 +75,7 @@ ax0.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,le
 colours_lit = ['grey','brown','darkviolet','navy']
 rot = 55
 
-#Literature values for x_HI
+#Literature values for x_HI Ďurovčíková et al., 2024, ApJ , 969, 162; Gaikwad et al., 2023, MNRAS , 525, 4093; Greig et al., 2024, MNRAS , 530, 3208
 ax0.axvspan(0.21-0.07,0.21+0.17,alpha=0.2,color=colours_lit[0])
 ax0.text(0.15,-1.5,'Ďurovčíková+24',color=colours_lit[0],rotation=rot,fontsize=12)
 
@@ -113,6 +113,7 @@ for i in range(len(files_to_remove)):
 '''
 logfX = np.empty(len(files))
 xHI_mean = np.empty(len(files))
+TK_mean = np.empty(len(files))
 T_HI = np.empty(len(files))
 
 for j in range(len(files)):
@@ -127,6 +128,7 @@ for j in range(len(files)):
 
   xHI     = data[(x_initial+2*Nbins+1*Nlos*Nbins):(x_initial+2*Nbins+2*Nlos*Nbins)]
   TK      = data[(x_initial+2*Nbins+2*Nlos*Nbins):(x_initial+2*Nbins+3*Nlos*Nbins)]
+  TK_mean[j] = np.mean(TK)
   ind_neu = np.where(xHI>=0.9)[0]
   T_HI[j] = np.mean(TK[ind_neu])
 

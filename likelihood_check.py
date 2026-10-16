@@ -1,8 +1,8 @@
 """
-Code to check covariance used.
+Code to check covariance/likelihood used. 
+Plots likelihoods at a particular k-bin.
 
 Version 18.6.2025
-
 """
 #Import necessary packages
 import sys
@@ -27,25 +27,29 @@ np.random.seed(5)
 import time
 import csv
 start_clock = time.perf_counter()
+
 #Input parameters
 z_name = float(sys.argv[1])         #redshift
 dvH = float(sys.argv[2])            #used rebinning for line profile convolution in m/s
 spec_res = float(sys.argv[3])       #spectral resolution of the telescope in kHz
 path_LOS = 'datasets/21cmFAST_los/los/'
-telescope = str(sys.argv[4])
+telescope = str(sys.argv[4])        #telescope for mock observation
 S147 = float(sys.argv[5])           #intrinsic flux density of background source at 147MHz in mJy
 alphaR = float(sys.argv[6])         #radio spectrum power-law index of background source
 tint = float(sys.argv[7])           #intergration time for the observation in h
-Nobs = int(sys.argv[8])
-xHI_mean_mock = float(sys.argv[9])
-logfX_mock    = float(sys.argv[10])
-k_ind = int(sys.argv[11])
+Nobs = int(sys.argv[8])             #number of LOS for mock observation
+xHI_mean_mock = float(sys.argv[9])  #mean neutrla hydrogen fraction
+logfX_mock    = float(sys.argv[10]) #X-ray pre-heating efficiency
+k_ind = int(sys.argv[11])           #k-bin to be used tested
 
+
+#Set number of LOS, samples and k bins
 Nlos = 1000
 n_los = 1000
 Nsamples = 10000
 Nkbins = 6
 
+#Set parameter ranges for the prior
 min_logfX = -4.
 max_logfX = 1.
 #min_fX = 0.0001
@@ -62,7 +66,6 @@ log_k_bins = log_k_bins[2:2+Nkbins+1]
 
 k_bins = np.power(10.,log_k_bins)
 k_bins_cent = np.power(10.,log_k_bins+d_log_k_bins/2.)[:-1]
-#print(k_bins_cent)
 print('k_ind = %.2fMHz^-1' % k_bins_cent[k_ind])
 
 
@@ -87,7 +90,6 @@ for i in range(n_los):
 #Get mean for each k bin assuming observation of multiple LOS
 PS_nsv_ens = instrumental_features.multi_obs(PS_nsv_bin,Nobs,Nsamples)
 PS_nsv_mean = np.mean(PS_nsv_ens,axis=0)
-#PS_nsv_sigma = np.std(PS_nsv_ens,axis=0)
 Mcovar_nsv = np.cov(np.transpose(PS_nsv_ens))
 
 #Read data for noise only
@@ -108,19 +110,15 @@ for i in range(Nlos):
 
 PS_noise_mean = np.mean(PS_noise_bin,axis=0)
 
+#Subtract mean noise power spectrum from the mock signal+noise power spectrum
 PS_nsub = PS_nsv_bin-PS_noise_mean
 PS_nsub_ens = instrumental_features.multi_obs(PS_nsub,Nobs,Nsamples)
 
 
 
-#Choose which combination of Mcovar and y to be used
-#Mcovar = Mcovar_mock
-Mcovar = Mcovar_nsv
-#PS_mock_mean = signal_multiobs_mean_mock
+#Choose which combination of Mcovar and mock to be used
+Mcovar = Mcovar_nsv #signal+noise - i.e. sample variance and noise
 
-#print('Mcovar.shape=', Mcovar.shape)
-#print('PS_mock_mean.shape=', PS_mock_mean.shape)
-#print(Mcovar)
 print('Covariance matrix and mock data prepared')
 
 stop_clock = time.perf_counter()
@@ -129,6 +127,7 @@ print('It took %.3fs of your life' % time_taken)
 
 
 
+#The following loop can be commented out if interpolator data already pre-computed
 '''
 done_perc = 0.1
 print('Initiate interpolator setup')
@@ -184,7 +183,6 @@ logfX    = data[1*N_parcom:2*N_parcom]
 PS_sim_mean = np.reshape(data[2*N_parcom:],(N_parcom,len(k_bins_cent)))
 
 #Set up N-dimensional linear interpolator for calculating P21 for any parameter values within the range given in the prior function
-#inter_fun_likelihood = interpolate.LinearNDInterpolator(np.transpose([xHI_mean,logfX]),Likelihood)
 inter_fun_PS21 = interpolate.LinearNDInterpolator(np.transpose([xHI_mean,logfX]),PS_sim_mean)
 
 print('Interpolator set up')
@@ -192,56 +190,6 @@ stop_clock = time.perf_counter()
 time_taken = (stop_clock-start_clock)
 print('It took %.3fs of your life' % time_taken)
 
-
-'''
-#Define parameters to be estimated
-#The below steps are based on tutarial for emcee package (Foreman-Mackey et al. 2013) at https://emcee.readthedocs.io/en/stable/tutorials/line/
-par_spc=np.array([xHI_mean,logfX])
-labels = [r"$\langle x_{\rm HI}\rangle$",r"$\mathrm{log}_{10}(f_{\mathrm{X}})$"]
-
-#Define prior distribution as uniform within the range of our simulated data
-logfX_cut_min = -0.6
-slope_cut = (0.81-0.99)/(max_logfX-logfX_cut_min)
-def log_prior(theta):
-    xHI_mean1, logfX1 = theta
-    #if min_xHI <= xHI_mean1 <= max_xHI and min_fX <= fX1 <= max_fX:
-    if min_xHI <= xHI_mean1 <= max_xHI and min_logfX <= logfX1 < logfX_cut_min:
-      return 0
-    elif logfX_cut_min <= logfX1 <= max_logfX and min_xHI <= xHI_mean1 <= 0.99+slope_cut*(logfX1-logfX_cut_min):
-      return 0
-    return -np.inf
-
-#Define (negative) likelihood function based on covariance matrix
-def log_likelihood(theta,signal_mock_mean,covar_mat):
-  xHI_mean1, logfX1 = theta 
-
-  # Add a small regularization term to the covariance matrix
-  #regularization = 1e-6 * np.eye(covar_mat.shape[0])
-  #covar_mat += regularization
-
-  d_mat = signal_mock_mean-inter_fun_PS21(xHI_mean1, logfX1)
-  d_mat_T = np.transpose(d_mat)
-  covar_mat_inv = np.linalg.inv(covar_mat)
-  covar_mat_det = np.linalg.det(covar_mat)
-
-  #print(d_mat)
-  #print(d_mat_T)
-  #rint(covar_mat)
-  #rint(covar_mat_det)
-  #print(covar_mat_inv)
-  #print(np.linalg.multi_dot([covar_mat,covar_mat_inv]))
-  #print(np.linalg.multi_dot([d_mat_T,covar_mat_inv,d_mat]))
-  #print(np.log(covar_mat_det))
-
-  return 0.5*np.linalg.multi_dot([d_mat_T,covar_mat_inv,d_mat])+np.log(covar_mat_det)
-
-#Define posterior function based on Bayes therom. Note that no normalization is assumed.
-def log_posterior(theta,signal_mock_mean,covar_mat):
-    LP = log_prior(theta)
-    if not np.isfinite(LP):
-        return -np.inf
-    return LP-log_likelihood(theta,signal_mock_mean,covar_mat)
-'''
 
 
 #Define Gaussian likelihood function based on a single covariance matrix and d element corresponding to the k of interest
@@ -272,6 +220,7 @@ gs = gridspec.GridSpec(1,1)
 
 ax = plt.subplot(gs[0,0])  
 
+#Select samples at a sepcific k-bin from the ensembles to be plotted as histograms
 PS_ens_atk_nsv = np.empty(Nsamples)
 PS_ens_atk_nsub = np.empty(Nsamples)
 for i in range(Nsamples):
@@ -283,7 +232,6 @@ ax.hist(PS_ens_atk_nsub,bins=PS_bins,density=True,color='darkorange',alpha=0.25,
 ax.plot(PS_bins_cent,likelihood[0],'-',color='fuchsia',label=r'$\mathcal{L}_{\rm B}(P_{21}|\mathbf{\theta})$')
 ax.legend(frameon=False,loc=[0.1,0.65],fontsize=fsize)
 ax.set_xlim(0,1.5e-5)
-#ax.set_xlim(0,.7e-5)
 ax.set_ylim(0.,5.5e5)
 ax.set_xlabel(r'$P_{21}(k=%.2f\,\rm MHz^{-1})$' % k_bins_cent[k_ind], fontsize=fsize)
 ax.set_ylabel(r'$PDF$', fontsize=fsize)
@@ -298,5 +246,5 @@ ax.tick_params(axis='both',which='minor',direction='in',bottom=True,top=True,lef
 
 plt.tight_layout()
 plt.subplots_adjust(hspace=.0)
-plt.savefig('likelihood_check/likelihood_check_z%.1f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_Nobs%d_k%.2f.png' % (z_name,telescope,spec_res,tint,S147,alphaR,Nobs,k_bins_cent[k_ind]),dpi=300)
+plt.savefig('plots/likelihood_check_z%.1f_%s_%dkHz_t%dh_Smin%.1fmJy_alphaR%.2f_Nobs%d_k%.2f.png' % (z_name,telescope,spec_res,tint,S147,alphaR,Nobs,k_bins_cent[k_ind]),dpi=300)
 plt.show()

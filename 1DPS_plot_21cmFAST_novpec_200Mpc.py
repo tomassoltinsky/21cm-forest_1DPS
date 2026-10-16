@@ -23,7 +23,7 @@ fsize = 24
 
 #Input parameters
 z_name = float(sys.argv[1])   #redshift
-dvH = float(sys.argv[2])      #rebinning width in km/s
+dvH = float(sys.argv[2])      #rebinning width in m/s
 logfX = float(sys.argv[3])    #log10(f_X)
 xHI_mean = float(sys.argv[4]) #<x_HI>
 path = '../../datasets/21cmFAST_los/'

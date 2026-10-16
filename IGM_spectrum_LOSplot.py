@@ -13,7 +13,7 @@ import instrumental_features
 fsize = 16
 path = str(sys.argv[1])				#path to the data folder
 z_name = float(sys.argv[2])			#redshift
-dvH = float(sys.argv[3])			#Velocity resolution in km/s
+dvH = float(sys.argv[3])			#Velocity resolution in m/s
 fX_name = float(sys.argv[4])		#X-ray heating efficiency
 xHI_mean_name = float(sys.argv[5])	#Mean neutral fraction
 filenum = int(sys.argv[6])			#File number to be plotted

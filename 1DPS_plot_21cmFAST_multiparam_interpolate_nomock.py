@@ -20,7 +20,7 @@ fsize = 24
 
 #Input parameters
 z_name = float(sys.argv[1])   #redshift
-dvH = float(sys.argv[2])      #rebinning width in km/s
+dvH = float(sys.argv[2])      #rebinning width in m/s
 spec_res = float(sys.argv[3]) #spectral resolution of telescope (i.e. frequency channel width) in kHz
 n_los = 1000
 

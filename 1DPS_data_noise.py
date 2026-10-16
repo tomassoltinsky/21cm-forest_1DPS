@@ -18,7 +18,7 @@ start_clock = time.perf_counter()
 path = 'datasets/21cmFAST_los/'
 
 z_name = float(sys.argv[1])		  #redshift
-dvH = float(sys.argv[2])		    #rebinning width in km/s
+dvH = float(sys.argv[2])		    #rebinning width in m/s
 spec_res = float(sys.argv[3])	  #spectral resolution of telescope (i.e. frequency channel width) in kHz
 telescope = str(sys.argv[4])	  #telescope
 N_d = int(sys.argv[5])			    #number dishes used by telescope

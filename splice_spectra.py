@@ -17,7 +17,7 @@ import instrumental_features
 fsize = 16
 path = 'datasets/21cmFAST_los/'
 z_name = 6.             #redshift
-dvH = 250               #Velocity resolution in km/s. 
+dvH = 250               #Velocity resolution in m/s. 
 Nlos = 10               #Number of lines-of-sight in the original data
 nfiles = 2              #Number of files in the original data
 Nlos_new = Nlos*nfiles  #Number of lines-of-sight in the new data

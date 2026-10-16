@@ -31,8 +31,8 @@ z_name = float(sys.argv[1])         #redshift
 dvH = float(sys.argv[2])            #used rebinning for line profile convolution in m/s
 spec_res = float(sys.argv[3])       #spectral resolution of the telescope in kHz
 path_LOS = 'datasets/21cmFAST_los/los/'
-Nobs = int(sys.argv[4])
-Nkbins = int(sys.argv[5])
+Nobs = int(sys.argv[4])             #number of LOS in mick observation
+Nkbins = int(sys.argv[5])           #number of k-bins assumed for analysis
 
 #Observational configurations
 telescope = ['uGMRT','uGMRT','SKA1-low']
