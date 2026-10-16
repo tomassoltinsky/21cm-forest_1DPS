@@ -177,7 +177,7 @@ for Nkbins_i in range(len(Nkbins_all)):
   labels = [r"$\langle x_{\rm HI}\rangle$",r"$\mathrm{log}_{10}(f_{\mathrm{X}})$"]
 
   #Define prior distribution as uniform within the range of our simulated data
-  #See Fig. 2 in Patil et al. 2026, 546, 1 for the simulated IGM models array
+  #See Fig. 2 in Patil et al. 2026, 546, 4, 18 for the simulated IGM models array
   logfX_cut_min = -0.6
   slope_cut = (0.81-0.99)/(max_logfX-logfX_cut_min)
   def log_prior(theta):

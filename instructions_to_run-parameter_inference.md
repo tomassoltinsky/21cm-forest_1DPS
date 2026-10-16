@@ -146,4 +146,4 @@ python likelihood_check.py \<z_name\> \<dvH\> \<spec_res\> \<telescope\> \<S147\
 \<k_ind\> - index of the k-bin for which the likelihood is tested<br>
 
 This code checks the Gaussian likelihood assumed for the Bayesian parameter inference at a selected k-bin. It compares the assumed Gaussian likelihood with the distributions obtained from ensembles of the noisy and noise-subtracted mock 1D power spectra. The covariance matrix includes both sample variance and instrumental noise. The resulting figure is saved in plots/.<br>
-For Fig. 10, 12 and 13 in Šoltinský et al. 2025, MNRAS, 537, 364 - https://ui.adsabs.harvard.edu/abs/2025MNRAS.537..364S/abstract
+For Fig. A1 in Patil et al. 2026, 546, 4, 18 - https://ui.adsabs.harvard.edu/abs/2026MNRAS.546ag236P/abstract
