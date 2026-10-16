@@ -33,3 +33,5 @@ please cite Šoltinský et al. 2025, MNRAS, 537, 1, 364 - https://ui.adsabs.harv
 If you use the AI/ML based architecture and analysis (U-net, XGBoost)  
 please cite Patil et al. 2026, MNRAS, 546, 4, 18 - https://ui.adsabs.harvard.edu/abs/2026MNRAS.546ag236P/abstract
 
+If you use the post-processed uGMRT archival data, calibration and subsequent analysis
+please cite Šoltinský et al. 2026, arXiv:2607.15341 - https://ui.adsabs.harvard.edu/abs/2026arXiv260715341S/abstract
