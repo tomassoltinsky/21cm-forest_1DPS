@@ -37,3 +37,73 @@ This code processes the measured signal and thermal noise 1D power spectra from 
 For Fig. 8 in Šoltinský et al. 2026.
 
 <br>
+
+*spectrum_21cmFAST_noisy_uGMRT_archivaldata.py*
+
+python spectrum_21cmFAST_noisy_uGMRT_archivaldata.py \<z_name\> \<dvH\> \<spec_res\> \<telescope\> \<S_min_QSO\> \<alpha_R\> \<fX_name\> \<xHI_mean\> \<LOS\> \<rms\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<dvH\> - velocity resolution of the LOS data in m/s<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<telescope\> - telescope name<br>
+\<S_min_QSO\> - intrinsic flux density of the QSO at 147 MHz in mJy<br>
+\<alpha_R\> - radio spectral index of the QSO<br>
+\<fX_name\> - X-ray pre-heating efficiency fX of the simulated IGM model<br>
+\<xHI_mean\> - mean neutral hydrogen fraction of the simulated IGM model<br>
+\<LOS\> - index of the simulated line-of-sight<br>
+\<rms\> - rms instrumental noise per frequency channel in mJy/beam<br>
+
+This code generates a forward-modelled synthetic noisy 21-cm forest spectrum corresponding to the uGMRT archival observations of PSO J352-15. The simulated forest is placed blueward of the target frequency, while a continuum is assumed redward of the target. Frequency-independent Gaussian instrumental noise in flux-density units, specified by the measured rms of the archival observations, is added to the spectrum. The fractional noise relative to the QSO continuum varies with frequency according to the assumed radio spectral index. The resulting mock signal and signal+noise spectra are plotted over the frequency range of the archival uGMRT observations. The resulting figure is saved in plots/Soltinsky_2026/.<br>
+For Fig. 9 in Šoltinský et al. 2026.
+
+<br>
+
+*1DPS_data_signal_21cmFAST_multiparam_uGMRT-AD_flag.py*
+
+python 1DPS_data_signal_21cmFAST_multiparam_uGMRT-AD_flag.py \<z_name\> \<dvH\> \<spec_res\> \<n_los\> \<WLDlvl\> \<f_flag\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<dvH\> - velocity resolution of the LOS data in m/s<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<n_los\> - number of simulated LOS used to calculate the signal 1D power spectra<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code generates forward-modelled 21-cm forest signal 1D power spectra with the same frequency-channel mask as used for the uGMRT archival observations. The corrupted channels are identified from the off-source spectra after residual bandpass subtraction using wavelet decomposition (WLD). The resulting observational channel mask is applied to the simulated 21cmFAST LOS, which are smoothed to the spectral resolution of the observations before calculating their masked 1D power spectra. The IGM models used for the calculation can be selected within the code. The resulting signal 1D power spectrum ensembles are saved in 1DPS_dimensionless/1DPS_signal/.
+
+<br>
+
+*1DPS_data_noise_uGMRT-AD_flag.py*
+
+python 1DPS_data_noise_uGMRT-AD_flag.py \<z_name\> \<dvH\> \<telescope\> \<spec_res\> \<S147\> \<alphaR\> \<rms\> \<WLDlvl\> \<f_flag\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<dvH\> - velocity resolution of the LOS data in m/s<br>
+\<telescope\> - telescope name<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<S147\> - intrinsic flux density of the QSO at 147 MHz in mJy<br>
+\<alphaR\> - radio spectral index of the QSO<br>
+\<rms\> - frequency-independent instrumental noise rms per frequency channel in mJy/beam<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code generates forward-modelled noise-only 1D power spectrum realizations corresponding to the uGMRT archival observations of PSO J352-15. The corrupted frequency channels are identified from the off-source spectra after residual bandpass subtraction using wavelet decomposition (WLD). Gaussian instrumental noise realizations are generated assuming a frequency-independent noise rms in flux-density units, while the fractional noise varies across the band according to the frequency-dependent QSO continuum. The same observational channel mask is applied to each synthetic noise realization before calculating its masked 1D power spectrum. The resulting noise 1D power spectrum ensemble is saved in 1DPS_dimensionless/1DPS_noise/.
+
+<br>
+
+*1DPS_plot_21cmFAST_multinoise_uGMRT-AD_obs_flag.py*
+
+python 1DPS_plot_21cmFAST_multinoise_uGMRT-AD_obs_flag.py \<z_name\> \<dvH\> \<spec_res\> \<fX_name\> \<xHI_mean\> \<WLDlvl\> \<f_flag\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<dvH\> - velocity resolution of the LOS data in m/s<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<fX_name\> - log10 of the X-ray pre-heating efficiency of the simulated IGM model<br>
+\<xHI_mean\> - mean neutral hydrogen fraction of the simulated IGM model<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code compares the post-processed 21-cm forest 1D power spectrum measured from the uGMRT archival observations of PSO J352-15 with forward-modelled 21cmFAST signal and synthetic noise 1D power spectra. The simulated signal power spectrum is shown together with its LOS scatter, while synthetic noise power spectra are shown for two instrumental noise levels specified within the code. The simulated signal and noise power spectra include the same spectral-channel mask as the uGMRT observations. The approximate sidelobe-induced mode-mixing cutoff is also indicated, and the upper horizontal axis shows the corresponding cosmological wavenumber. The resulting figure is saved in plots/Soltinsky_2026/.<br>
+For Fig. 9 in Šoltinský et al. 2026.
+
+<br>
