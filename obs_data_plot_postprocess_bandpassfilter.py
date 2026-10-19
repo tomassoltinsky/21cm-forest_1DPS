@@ -3,6 +3,8 @@ Code to calibrate he uGMRT observational data once it is in the form of residual
 
 Includes: - Residual bandpass feature subtraction using wavelet decomposition (WLD)
           - Flagging of bad channels based on relative noise rms
+
+Version 5.9.2026
 '''
 import sys
 import numpy as np

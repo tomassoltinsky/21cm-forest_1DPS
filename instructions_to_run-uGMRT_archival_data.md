@@ -25,6 +25,15 @@ For Fig. 3, 5, 6, 7, C1 and C2 in Šoltinský et al. 2026
 python noise-level_uGMRT.py
 
 This code measures the noise level of the uGMRT observations as a function of effective integration time. The off-source spectra are combined cumulatively from one to five observing nights and processed using the same residual bandpass subtraction and channel-flagging procedure as the full observational dataset. The resulting noise rms per frequency channel is measured for each effective integration time and fitted with an empirical power-law relation. The measured scaling is compared with the theoretical radiometer scaling and is also used to forecast the sensitivity for longer uGMRT observations. The calibration parameters, integration times, and fraction of data excised during the analysis are specified within the code. The resulting figure is saved in plots/Soltinsky_2026/.<br>
-For Fig. 4 in Šoltinský et al. 2026.
+For Fig. 4 and Table 1 in Šoltinský et al. 2026.
+
+<br>
+
+*obs_data_plot_MWA.py*
+
+python obs_data_plot_MWA.py
+
+This code processes the measured signal and thermal noise 1D power spectra from the MWA observations of PSO J352-15 for comparison with the uGMRT measurement. The MWA power spectra are rebinned using the same logarithmic k bins as the uGMRT data. The code also calculates and indicates the approximate sidelobe-induced mode-mixing cutoff for the MWA observations and converts between frequency and cosmological wavenumbers. The resulting figure is saved in plots/Soltinsky_2026/.<br>
+For Fig. 8 in Šoltinský et al. 2026.
 
 <br>
