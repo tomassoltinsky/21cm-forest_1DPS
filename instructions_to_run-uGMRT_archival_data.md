@@ -107,3 +107,106 @@ This code compares the post-processed 21-cm forest 1D power spectrum measured fr
 For Fig. 9 in Šoltinský et al. 2026.
 
 <br>
+
+*interpolator_1DPS.py*
+
+python interpolator_1DPS.py \<z_name\> \<spec_res\> \<WLDlvl\> \<f_flag\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code prepares the 21-cm forest 1D power spectrum datasets used for interpolation and Bayesian parameter inference. For each 21cmFAST model, it reads the IGM parameters, calculates the mean temperature of highly neutral gas, and reads and bins the corresponding forward-modelled signal 1D power spectrum ensemble. Selected models are removed from the final parameter space before the individual-LOS and mean 1D power spectrum datasets are saved in datasets/interpolators/. The code also produces a figure (saved in plots/) showing the final parameter space in xHI, THI and logfX.<br>
+The saved interpolator datasets included in this repository were generated using the full set of simulations covering the parameter space explored in the study. The underlying 21cmFAST simulation and 1D power spectrum datasets used to generate them are not included in the repository due to their large size, but are available from the author upon request.
+
+<br>
+
+*covar_matrix_plot_uGMRT-AD_obs_WLD_mask.py*
+
+python covar_matrix_plot_uGMRT-AD_obs_WLD_mask.py \<z_name\> \<spec_res\> \<xHI_mock\> \<logTHI_mock\> \<WLDlvl\> \<f_flag\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<xHI_mock\> - mean neutral hydrogen fraction of the selected IGM model<br>
+\<logTHI_mock\> - log10 of the mean temperature of the neutral IGM in K<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code calculates and plots covariance matrices for the 21-cm forest 1D power spectrum corresponding to the uGMRT archival observations of PSO J352-15. The sample-variance covariance is calculated from an ensemble of forward-modelled 21cmFAST signal power spectra interpolated to the specified xHI and THI values. The noise covariance is calculated directly from the post-processed measured off-source power spectra, while the total covariance is calculated from the combined signal+noise ensemble. Separate covariance matrices are produced for the sample variance, noise, and signal+noise.<br>
+For Fig. 10 in Šoltinský et al. 2026.
+
+<br>
+
+*param_inf_uGMRT-AD_postprocess_obs_THIvsxHI.py*
+
+python param_inf_uGMRT-AD_postprocess_obs_THIvsxHI.py \<z_name\> \<spec_res\> \<telescope\> \<WLDlvl\> \<f_flag\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<telescope\> - telescope used for the observations<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code performs Bayesian parameter inference in the mean neutral hydrogen fraction - mean neutral IGM temperature (xHI-logTHI) parameter space using the postprocessed uGMRT archival observations of PSO J352-15. The mean measured off-source noise 1D PS is subtracted from the target 1D PS following Method A2 in Patil et al. 2026. At each point sampled by the MCMC, the noise-subtracted observed 1D PS is compared with the interpolated mean 21-cm forest signal 1D PS at the corresponding xHI and logTHI values. The parameter-dependent covariance matrix is calculated from the corresponding ensemble of interpolated signal 1D PS realizations combined with the measured off-source noise realizations. The code saves the flattened posterior samples in MCMC_samples/uGMRT_archivaldata/ and produces MCMC chain and posterior corner plots saved in plots/Soltinsky_2026/.
+
+<br>
+
+*postdist_plot_uGMRTarchivaldata_obs_THIvsxHI.py*
+
+python postdist_plot_uGMRTarchivaldata_obs_THIvsxHI.py \<WLDlvl\> \<f_flag\>
+
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+
+This code plots the posterior constraints on the mean neutral hydrogen fraction and mean temperature of the neutral IGM obtained from the null detection of the 21-cm forest 1D power spectrum in the uGMRT archival observations of PSO J352-15. The posterior constraints are compared with existing neutral-fraction constraints from Lyα observations and neutral-IGM temperature constraints from 21-cm tomography. The code also extracts the lower temperature boundary of the posterior contour and evaluates the corresponding limits at selected xHI and THI values. A full posterior corner plot is produced as an additional diagnostic.<br>
+The results presented in the paper were obtained using an MCMC with 10 000 000 steps, and the corresponding figure is included in the repository. To reduce the size of the repository, the provided MCMC posterior distribution dataset is based on a shorter MCMC with 100 000 steps.<br>
+For Fig. 11 and D1 in Šoltinský et al. 2026.
+<br>
+
+*covar_matrix_plot_uGMRT-AD_sim_WLD_mask.py*
+
+python covar_matrix_plot_uGMRT-AD_sim_WLD_mask.py \<z_name\> \<spec_res\> \<xHI_mock\> \<logTHI_mock\> \<WLDlvl\> \<f_flag\> \<rms\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<xHI_mock\> - mean neutral hydrogen fraction of the selected IGM model<br>
+\<logTHI_mock\> - log10 of the mean temperature of the neutral IGM in K<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean off-source noise rms<br>
+\<rms\> - frequency-independent instrumental noise rms per frequency channel in mJy/beam<br>
+
+This code calculates and plots covariance matrices for simulated 21-cm forest observations corresponding to the uGMRT archival observations of PSO J352-15. The sample-variance covariance is calculated from an ensemble of forward-modelled 21cmFAST signal power spectra interpolated to the specified xHI and THI values. The noise covariance is calculated from the corresponding simulated instrumental-noise power spectrum ensemble for the specified noise rms, while the total covariance is calculated from the combined signal+noise ensemble. Separate covariance matrices are produced for the sample variance, noise, and signal+noise.<br>
+For Fig. E1 in Šoltinský et al. 2026.
+
+<br>
+
+*param_inf_uGMRT-AD_postprocess_sim_THIvsxHI.py*
+
+python param_inf_uGMRT-AD_postprocess_sim_THIvsxHI.py \<z_name\> \<spec_res\> \<telescope\> \<S147\> \<alphaR\> \<WLDlvl\> \<f_flag\> \<rms\>
+
+\<z_name\> - redshift of the 21cmFAST LOS data<br>
+\<spec_res\> - spectral resolution of the telescope (i.e. frequency channel width) in kHz<br>
+\<telescope\> - telescope used for the simulated observation<br>
+\<S147\> - source flux density at 147 MHz in mJy<br>
+\<alphaR\> - radio spectral index of the source<br>
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean noise rms<br>
+\<rms\> - frequency-independent instrumental noise rms per frequency channel in mJy/beam<br>
+
+This code performs Bayesian parameter inference in the mean neutral hydrogen fraction - mean neutral IGM temperature (xHI-logTHI) parameter space for a simulated uGMRT observation. One realization of the simulated instrumental-noise 1D PS is used as a mock null observation, and the mean simulated noise 1D PS is subtracted following Method A2 in Patil et al. 2026. At each point sampled by the MCMC, the noise-subtracted mock observation is compared with the interpolated mean 21-cm forest signal 1D PS at the corresponding xHI and logTHI values. The parameter-dependent covariance matrix is calculated from the corresponding ensemble of interpolated signal 1D PS realizations combined with the simulated instrumental-noise realizations. The code saves the flattened posterior samples in MCMC_samples/uGMRT_archivaldata/ and produces MCMC chain and posterior corner plots saved in plots/Soltinsky_2026/.
+
+<br>
+
+*postdist_plot_uGMRTarchivaldata_sim_THIvsxHI.py*
+
+python postdist_plot_uGMRTarchivaldata_sim_THIvsxHI.py \<WLDlvl\> \<f_flag\> \<rms\> \<LOS\>
+
+\<WLDlvl\> - level of wavelet decomposition used for residual bandpass feature subtraction; 0 corresponds to the coarsest features<br>
+\<f_flag\> - threshold for flagging bad frequency channels in units of the mean noise rms<br>
+\<rms\> - frequency-independent instrumental noise rms per frequency channel in mJy/beam<br>
+\<LOS\> - simulated instrumental-noise realization used as the mock observation<br>
+
+This code plots the forecasted posterior constraints on the mean neutral hydrogen fraction and mean temperature of the neutral IGM obtained from a simulated null detection of the 21-cm forest 1D power spectrum for PSO J352-15 with uGMRT. The posterior constraints are compared with existing neutral-fraction constraints from Lyα observations and neutral-IGM temperature constraints from 21-cm tomography. The code also extracts the lower temperature boundary of the posterior contour and evaluates the corresponding limits at selected xHI values.<br>
+The analysis in the paper uses an MCMC with 10 000 000 steps, and the corresponding figure is included in the repository. Due to file-size limitations, the MCMC posterior distribution dataset included in the repository is based on a shorter run with 100 000 steps.<br>
+For Fig. 12 in Šoltinský et al. 2026.
